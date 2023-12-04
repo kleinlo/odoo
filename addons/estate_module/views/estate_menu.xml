@@ -1,0 +1,8 @@
+<odoo>
+    <menuitem id="estate_menu_root" name="TestEstate">
+        <menuitem id="estate_first_level_menu" name="First Level">
+            <menuitem id="estate_model_menu_action" action="estate_model_action"/>
+<!--            <menuitem id="estate_type_action" parent="estate_first_level_menu" action="estate_type_action"/>-->
+        </menuitem>
+    </menuitem>
+</odoo>
