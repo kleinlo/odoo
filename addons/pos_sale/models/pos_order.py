@@ -128,11 +128,13 @@ class PosOrderLine(models.Model):
         result['sale_order_origin_id'] = bool(orderline.sale_order_origin_id) and orderline.sale_order_origin_id.read(fields=['name'])[0]
         return result
 
-    def _order_line_fields(self, line, session_id):
+    def _order_line_fields(self, line, session_id=None):
         result = super()._order_line_fields(line, session_id)
         vals = result[2]
         if vals.get('sale_order_origin_id', False):
             vals['sale_order_origin_id'] = vals['sale_order_origin_id']['id']
         if vals.get('sale_order_line_id', False):
-            vals['sale_order_line_id'] = vals['sale_order_line_id']['id']
+            #We need to make sure the order line has not been deleted while the order was being handled in the PoS
+            order_line = self.env['sale.order.line'].search([('id', '=', vals['sale_order_line_id']['id'])], limit=1)
+            vals['sale_order_line_id'] = order_line.id if order_line else False
         return result

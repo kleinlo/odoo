@@ -121,6 +121,11 @@
                 'search_default_group_by_state': 1
             }
         </field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_empty_folder">
+                No data to display
+            </p>
+        </field>
     </record>
     <record id="hr_contract_history_to_review_view_list_action" model="ir.actions.act_window">
         <field name="name">Contracts to Review</field>
@@ -151,7 +156,8 @@
                 <field name="name"/>
                 <field name="date_start"/>
                 <field string="Reference Working Time" name="resource_calendar_id" optional="hide"/>
-                <field name="under_contract_state" widget="state_selection" optional="hide"/>
+                <field name="under_contract_state" widget="state_selection" optional="hide"
+                    options="{'hide_label': False}"/>
                 <field name="structure_type_id" optional="hide"/>
                 <field name="currency_id" column_invisible="True"/>
                 <field name="wage" optional="hide"/>

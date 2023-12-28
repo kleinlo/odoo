@@ -313,10 +313,10 @@ class SaleOrderLine(models.Model):
     @api.depends('product_id')
     def _compute_name(self):
         for line in self:
-            lang = line.order_partner_id.lang or self.env.user.lang
             if not line.product_id:
                 continue
-            if not line.order_partner_id.is_public:
+            lang = line.order_id._get_lang()
+            if lang != self.env.lang:
                 line = line.with_context(lang=lang)
             name = line._get_sale_order_line_multiline_description_sale()
             if line.is_downpayment and not line.display_type:
@@ -433,6 +433,7 @@ class SaleOrderLine(models.Model):
                     continue
                 fiscal_position = line.order_id.fiscal_position_id
                 cache_key = (fiscal_position.id, company.id, tuple(taxes.ids))
+                cache_key += line._get_custom_compute_tax_cache_key()
                 if cache_key in cached_taxes:
                     result = cached_taxes[cache_key]
                 else:
@@ -440,6 +441,10 @@ class SaleOrderLine(models.Model):
                     cached_taxes[cache_key] = result
                 # If company_id is set, always filter taxes by the company
                 line.tax_id = result
+
+    def _get_custom_compute_tax_cache_key(self):
+        """Hook method to be able to set/get cached taxes while computing them"""
+        return tuple()
 
     @api.depends('product_id', 'product_uom', 'product_uom_qty')
     def _compute_pricelist_item_id(self):

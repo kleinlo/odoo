@@ -47,6 +47,7 @@ class AccountTestInvoicingCommon(TransactionCase):
     @classmethod
     def setUpClass(cls, chart_template_ref=None):
         super().setUpClass()
+        cls.env.ref('base.main_company').currency_id = cls.env.ref('base.USD')
         instantiate_accountman(cls)
 
         assert 'post_install' in cls.test_tags, 'This test requires a CoA to be installed, it should be tagged "post_install"'
@@ -177,6 +178,16 @@ class AccountTestInvoicingCommon(TransactionCase):
         bank_journal = cls.company_data['default_journal_bank']
         cls.inbound_payment_method_line = bank_journal.inbound_payment_method_line_ids[0]
         cls.outbound_payment_method_line = bank_journal.outbound_payment_method_line_ids[0]
+
+    @classmethod
+    def change_company_country(cls, company, country):
+        company.country_id = country
+        company.account_fiscal_country_id = country
+        for model in ('account.tax', 'account.tax.group'):
+            cls.env.add_to_compute(
+                cls.env[model]._fields['country_id'],
+                cls.env[model].search([('company_id', '=', company.id)]),
+            )
 
     @classmethod
     def setup_company_data(cls, company_name, chart_template=None, **kwargs):

@@ -34,7 +34,7 @@ class SupplierInfo(models.Model):
         'uom.uom', 'Unit of Measure',
         related='product_tmpl_id.uom_po_id')
     min_qty = fields.Float(
-        'Quantity', default=0.0, required=True, digits="Product Unit Of Measure",
+        'Quantity', default=0.0, required=True, digits="Product Unit of Measure",
         help="The quantity to purchase from this vendor to benefit from the price, expressed in the vendor Product Unit of Measure if not any, in the default unit of measure of the product otherwise.")
     price = fields.Float(
         'Price', default=0.0, digits='Product Price',
@@ -51,9 +51,7 @@ class SupplierInfo(models.Model):
     date_end = fields.Date('End Date', help="End date for this vendor price")
     product_id = fields.Many2one(
         'product.product', 'Product Variant', check_company=True,
-        domain="[('product_tmpl_id', '=', parent.id)] if context.get('base_model_name') == 'product.template' else"
-            " [('product_tmpl_id', '=', parent.product_tmpl_id)] if context.get('base_model_name') == 'product.product' else"
-            " [('product_tmpl_id', '=', product_tmpl_id)] if product_tmpl_id else []",
+        domain="[('product_tmpl_id', '=', product_tmpl_id)] if product_tmpl_id else []",
         default=_default_product_id,
         help="If not set, the vendor price will apply to all variants of this product.")
     product_tmpl_id = fields.Many2one(

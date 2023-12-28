@@ -6,8 +6,6 @@
  */
 
 import { App } from "@odoo/owl";
-import { patch } from "@web/core/utils/patch";
-import { ORM } from "@web/core/orm_service";
 import { browser } from "@web/core/browser/browser";
 
 const MOUSE_EVENTS = ["mouseover", "mouseenter", "mousedown", "mouseup", "click"];
@@ -16,6 +14,7 @@ const BLACKLISTED_MENUS = [
     "base.menu_third_party", // Open a new tab
     "event.menu_event_registration_desk", // there's no way to come back from this menu (tablet mode)
     "hr_attendance.menu_hr_attendance_kiosk_no_user_mode", // same here (tablet mode)
+    "mrp_workorder.menu_mrp_workorder_root", // same here (tablet mode)
     "account.menu_action_account_bank_journal_form", // Modal in an iFrame
 ];
 // If you change this selector, adapt Studio test "Studio icon matches the clickbot selector"
@@ -36,27 +35,17 @@ let testedMenus;
 let testedFilters;
 let testedModals;
 
-let unPatchORM;
-
 /**
  * Hook on specific activities of the webclient to detect when to move forward.
  * This should be done only once.
  */
 function setup() {
-    unPatchORM = patch(ORM.prototype, {
-        async call(model, method, args = [], kwargs = {}) {
-            calledRPC.push(`${model}.${method}`);
-            try {
-                return await super.call(...arguments);
-            } finally {
-                calledRPC.splice(calledRPC.indexOf(`${model}.${method}`), 1);
-            }
-        },
-    });
     env = odoo.__WOWL_DEBUG__.root.env;
     env.bus.addEventListener("ACTION_MANAGER:UI-UPDATED", uiUpdate);
+    env.bus.addEventListener("RPC:REQUEST", onRPCRequest);
+    env.bus.addEventListener("RPC:RESPONSE", onRPCResponse);
     actionCount = 0;
-    calledRPC = [];
+    calledRPC = {};
     studioCount = 0;
     testedApps = [];
     testedMenus = [];
@@ -68,13 +57,22 @@ function setup() {
     isEnterprise = odoo.info && odoo.info.isEnterprise;
 }
 
+function onRPCRequest({ detail }) {
+    calledRPC[detail.data.id] = detail.url;
+}
+
+function onRPCResponse({ detail }) {
+    delete calledRPC[detail.data.id];
+}
+
 function uiUpdate() {
     actionCount++;
 }
 
 function cleanup() {
-    unPatchORM();
     env.bus.removeEventListener("ACTION_MANAGER:UI-UPDATED", uiUpdate);
+    env.bus.removeEventListener("RPC:REQUEST", onRPCRequest);
+    env.bus.removeEventListener("RPC:RESPONSE", onRPCResponse);
 }
 
 /**
@@ -121,7 +119,7 @@ async function waitForCondition(stopCondition) {
     let timeLimit = initialTime;
 
     function hasPendingRPC() {
-        return calledRPC.length > 0;
+        return Object.keys(calledRPC).length > 0;
     }
     function hasScheduledTask() {
         let size = 0;
@@ -136,9 +134,26 @@ async function waitForCondition(stopCondition) {
             throw new Error("Error dialog detected");
         }
         if (timeLimit <= 0) {
-            throw new Error(
-                `Timeout, the clicked element took more than ${initialTime / 1000} seconds to load`
-            );
+            let msg = `Timeout, the clicked element took more than ${
+                initialTime / 1000
+            } seconds to load\n`;
+            msg += `Waiting for:\n`;
+            if (Object.keys(calledRPC).length > 0) {
+                msg += ` * ${Object.values(calledRPC).join(", ")} RPC\n`;
+            }
+            let scheduleTasks = "";
+            for (const app of App.apps) {
+                for (const task of app.scheduler.tasks) {
+                    scheduleTasks += task.node.name + ",";
+                }
+            }
+            if (scheduleTasks.length > 0) {
+                msg += ` * ${scheduleTasks} scheduled tasks\n`;
+            }
+            if (!stopCondition()) {
+                msg += ` * stopCondition: ${stopCondition.toString()}`;
+            }
+            throw new Error(msg);
         }
         await new Promise((resolve) => setTimeout(resolve, interval));
         timeLimit -= interval;
@@ -230,6 +245,9 @@ async function getNextApp() {
     } else {
         await ensureAppsMenu();
         apps = document.querySelectorAll(".o_navbar_apps_menu .dropdown-item");
+    }
+    if (apps.length === 0) {
+        throw new Error("No app found, it's possible that we are not on the home menu/app menu");
     }
     const app = apps[appIndex];
     appIndex++;
@@ -359,7 +377,7 @@ async function testMenuItem(element) {
     const menu = element.dataset.menuXmlid;
     const menuDescription = element.innerText.trim() + " " + menu;
     if (BLACKLISTED_MENUS.includes(menu)) {
-        browser.console.log(`Skipping blacklisted menu ${menuDescription}`);        
+        browser.console.log(`Skipping blacklisted menu ${menuDescription}`);
         return Promise.resolve(); // Skip black listed menus
     }
     browser.console.log(`Testing menu ${menuDescription}`);

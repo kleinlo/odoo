@@ -6,8 +6,8 @@ import {useService, useAutofocus} from "@web/core/utils/hooks";
 import {sprintf} from "@web/core/utils/strings";
 import {WebsiteDialog} from './dialog';
 import {FormViewDialog} from "@web/views/view_dialogs/form_view_dialog";
-import { renderToElement } from "@web/core/utils/render";
-import { Component, useEffect, useState, xml, useRef } from "@odoo/owl";
+import { renderToFragment } from "@web/core/utils/render";
+import { Component, useEffect, useState, xml, useRef, onMounted } from "@odoo/owl";
 
 export class PageDependencies extends Component {
     setup() {
@@ -48,7 +48,7 @@ export class PageDependencies extends Component {
             boundary: 'viewport',
             placement: 'right',
             trigger: 'focus',
-            content: renderToElement("website.PageDependencies.Tooltip", {
+            content: renderToFragment("website.PageDependencies.Tooltip", {
                 dependencies: this.state.dependencies,
             }),
         }).popover('toggle');
@@ -152,6 +152,14 @@ export class PagePropertiesDialog extends FormViewDialog {
         this.website = useService('website');
 
         this.viewProps.resId = this.resId;
+
+        // TODO: Remove in master, the `w-100` is causing a button's
+        // misalignment on the page properties dialog, this should be
+        // replaced by adding extra buttons to the default container in
+        // `this.viewProps.buttonTemplate`.
+        onMounted(() => {
+            this.modalRef.el?.querySelector(".modal-footer .o_cp_buttons")?.classList.remove("w-100");
+        });
     }
 
     get resId() {

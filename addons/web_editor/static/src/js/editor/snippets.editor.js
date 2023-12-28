@@ -780,6 +780,7 @@ var SnippetEditor = Widget.extend({
 
             if (option.forceNoDeleteButton) {
                 this.$el.add($optionsSection).find('.oe_snippet_remove').addClass('d-none');
+                this.$el.add($optionsSection).find('.oe_snippet_clone').addClass('d-none');
             }
 
             if (option.displayOverlayOptions) {
@@ -1007,14 +1008,6 @@ var SnippetEditor = Widget.extend({
      * @private
      */
     _onDragAndDropStart({ helper, addStyle }) {
-        // If the helper is inside the iframe, we want pointer events on the
-        // frame element so that they reach the window and properly apply
-        // the cursor.
-        const frameElement = helper.ownerDocument.defaultView.frameElement;
-        if (frameElement) {
-            addStyle(frameElement, { pointerEvents: "auto" });
-        }
-
         this.options.wysiwyg.odooEditor.observerUnactive('dragAndDropMoveSnippet');
         this.trigger_up('drag_and_drop_start');
         this.options.wysiwyg.odooEditor.automaticStepUnactive();
@@ -1095,7 +1088,6 @@ var SnippetEditor = Widget.extend({
             this.trigger_up('deactivate_snippet', {$snippet: self.$target});
         }
 
-        const openModalEl = this.$target[0].closest('.modal');
         const toInsertInline = window.getComputedStyle(this.$target[0]).display.includes('inline');
 
         this.dropped = false;
@@ -1135,17 +1127,6 @@ var SnippetEditor = Widget.extend({
         for (const lockedParentSelector of this.selectorLockWithin) {
             const closestLockedParentEl = dropCloneEl.closest(lockedParentSelector);
             const filterFunc = (i, el) => el.closest(lockedParentSelector) === closestLockedParentEl;
-            if ($selectorSiblings) {
-                $selectorSiblings = $selectorSiblings.filter(filterFunc);
-            }
-            if ($selectorChildren) {
-                $selectorChildren = $selectorChildren.filter(filterFunc);
-            }
-        }
-
-        // Remove the siblings/children outside the open popup.
-        if (openModalEl) {
-            const filterFunc = (i, el) => el.closest('.modal') === openModalEl;
             if ($selectorSiblings) {
                 $selectorSiblings = $selectorSiblings.filter(filterFunc);
             }
@@ -1903,7 +1884,7 @@ var SnippetsMenu = Widget.extend({
 
         const toolbarEl = this._toolbarWrapperEl.firstChild;
         toolbarEl.classList.remove('oe-floating');
-        this.options.wysiwyg.toolbarEl.style.display = 'none';
+        this.options.wysiwyg.toolbarEl.classList.add('d-none');
         this.options.wysiwyg.setupToolbar(toolbarEl);
         this._addToolbar();
         this._checkEditorToolbarVisibilityCallback = this._checkEditorToolbarVisibility.bind(this);
@@ -2127,6 +2108,7 @@ var SnippetsMenu = Widget.extend({
         // Dispose BS tooltips.
         this.tooltips.dispose();
         options.clearServiceCache();
+        options.clearControlledSnippets();
     },
 
     //--------------------------------------------------------------------------
@@ -2341,6 +2323,7 @@ var SnippetsMenu = Widget.extend({
         if ($open.length) {
             $selectorSiblings = $open.find($selectorSiblings);
             $selectorChildren = $open.find($selectorChildren);
+            selectorGrids = new Set([...selectorGrids].filter(rowEl => $open[0].contains(rowEl)));
         }
 
         // Check if the drop zone should be horizontal or vertical
@@ -2391,7 +2374,7 @@ var SnippetsMenu = Widget.extend({
 
         // Firstly, add a dropzone after the clone (if we are not in grid mode).
         var $clone = this.$body.find('.oe_drop_clone');
-        if ($clone.length && $clone.closest('div.o_grid_mode').length === 0) {
+        if ($clone.length && !$clone[0].parentElement.classList.contains("o_grid_mode")) {
             var $neighbor = $clone.prev();
             if (!$neighbor.length) {
                 $neighbor = $clone.next();
@@ -2406,6 +2389,11 @@ var SnippetsMenu = Widget.extend({
                 };
             }
             self._insertDropzone($('<we-hook/>').insertAfter($clone), data.vertical, data.style, canBeSanitizedUnless);
+        }
+        // If a modal or a dropdown is open, add the grid of the clone in the
+        // grid selectors to still be able to drop where the drag started.
+        if ($clone.length && $open.length && $clone[0].parentElement.classList.contains("o_grid_mode")) {
+            selectorGrids.add($clone[0].parentElement);
         }
 
         if ($selectorChildren) {
@@ -2431,7 +2419,7 @@ var SnippetsMenu = Widget.extend({
             $selectorSiblings = $(unique(($selectorSiblings || $()).add($selectorChildren.children()).get()));
         }
 
-        var noDropZonesSelector = '[data-invisible="1"], .o_we_no_overlay, :not(:visible), :not(:o_editable)';
+        var noDropZonesSelector = '[data-invisible="1"], .o_we_no_overlay, :not(:visible)';
         if ($selectorSiblings) {
             $selectorSiblings.not(`.oe_drop_zone, .oe_drop_clone, ${noDropZonesSelector}`).each(function () {
                 var data;
@@ -2843,6 +2831,13 @@ var SnippetsMenu = Widget.extend({
     _computeSelectorFunctions: function (selector, exclude, target, noCheck, isChildren, excludeParent) {
         var self = this;
 
+        // TODO in master: FOR_DROP should be a param of the function.
+        const forDropID = 'FOR_DROP';
+        const forDrop = exclude && exclude.startsWith(forDropID);
+        if (forDrop) {
+            exclude = exclude.substring(forDropID.length);
+        }
+
         // The `:not(.o_editable_media)` part is handled outside of the selector
         // (see filterFunc).
         // Note: the `:not([contenteditable="true"])` part was there for that
@@ -2860,9 +2855,22 @@ var SnippetsMenu = Widget.extend({
             if ($(this).is(exclude)) {
                 return false;
             }
-            // `o_editable_media` bypasses the `o_not_editable` class.
-            if (this.classList.contains('o_editable_media')) {
+            if (noCheck) {
+                // When noCheck is true, we only check the exclude.
+                return true;
+            }
+            // `o_editable_media` bypasses the `o_not_editable` class except for
+            // drag & drop.
+            if (!forDrop && this.classList.contains('o_editable_media')) {
                 return weUtils.shouldEditableMediaBeEditable(this);
+            }
+            if (forDrop && !isChildren) {
+                // it's a drop-in.
+                return !$(this)
+                    .is('.o_not_editable :not([contenteditable="true"]), .o_not_editable');
+            }
+            if (isChildren) {
+                return !$(this).is('.o_not_editable *');
             }
             return !$(this)
                 .is('.o_not_editable:not(.s_social_media) :not([contenteditable="true"])');
@@ -2960,8 +2968,8 @@ var SnippetsMenu = Widget.extend({
                 'base_target': target,
                 'selector': self._computeSelectorFunctions(selector, exclude, target, noCheck),
                 '$el': $style,
-                'drop-near': $style.data('drop-near') && self._computeSelectorFunctions($style.data('drop-near'), '', false, noCheck, true, excludeParent),
-                'drop-in': $style.data('drop-in') && self._computeSelectorFunctions($style.data('drop-in'), '', false, noCheck),
+                'drop-near': $style.data('drop-near') && self._computeSelectorFunctions($style.data('drop-near'), 'FOR_DROP', false, noCheck, true, excludeParent),
+                'drop-in': $style.data('drop-in') && self._computeSelectorFunctions($style.data('drop-in'), 'FOR_DROP', false, noCheck),
                 'drop-exclude-ancestor': this.dataset.dropExcludeAncestor,
                 'drop-lock-within': this.dataset.dropLockWithin,
                 'data': Object.assign({string: $style.attr('string')}, $style.data()),

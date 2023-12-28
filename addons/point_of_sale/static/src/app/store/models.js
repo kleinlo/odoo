@@ -1092,6 +1092,7 @@ export class Orderline extends PosModel {
             internalNote: this.getNote(),
             comboParent: this.comboParent?.get_full_product_name(),
             pack_lot_lines: this.get_lot_lines(),
+            price_without_discount: this.env.utils.formatCurrency(this.getUnitDisplayPriceBeforeDiscount()),
         };
     }
 }
@@ -1545,7 +1546,7 @@ export class Order extends PosModel {
             shippingDate:
                 this.shippingDate && formatDate(DateTime.fromJSDate(new Date(this.shippingDate))),
             headerData: {
-                ...this.pos.getReceiptHeaderData(),
+                ...this.pos.getReceiptHeaderData(this),
                 trackingNumber: this.trackingNumber,
             },
         };

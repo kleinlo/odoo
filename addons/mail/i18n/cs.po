@@ -8,8 +8,8 @@
 # karolína schusterová <karolina.schusterova@vdp.sk>, 2023
 # Jiří Podhorecký, 2023
 # Ivana Bartonkova, 2023
-# Jakub Smolka, 2023
 # Wil Odoo, 2023
+# Jakub Smolka, 2023
 # Aleš Fiala <f.ales1@seznam.cz>, 2023
 # Tomáš Píšek, 2023
 # 
@@ -397,7 +397,7 @@ msgstr ""
 #. module: mail
 #: model_terms:ir.ui.view,arch_db:mail.discuss_channel_view_kanban
 msgid "<span class=\"text-bg-danger\">Archived</span>"
-msgstr ""
+msgstr "<span class=\"text-bg-danger\">Archivováné</span>"
 
 #. module: mail
 #: model_terms:ir.ui.view,arch_db:mail.view_server_action_form_template
@@ -1564,7 +1564,7 @@ msgstr "Tělo"
 #: model:ir.model.fields,field_description:mail.field_mail_compose_message__body_has_template_value
 #: model:ir.model.fields,field_description:mail.field_mail_composer_mixin__body_has_template_value
 msgid "Body content is the same as the template"
-msgstr ""
+msgstr "Tělo obsahu se shoduje se šablonou"
 
 #. module: mail
 #. odoo-javascript
@@ -1582,7 +1582,7 @@ msgstr "Bot"
 #: model:ir.model.fields,field_description:mail.field_res_users__message_bounce
 #: model:ir.model.fields.selection,name:mail.selection__mail_notification__failure_type__mail_bounce
 msgid "Bounce"
-msgstr "Oťuknout"
+msgstr "Bounce"
 
 #. module: mail
 #: model:ir.model.fields,field_description:mail.field_mail_alias_domain__bounce_alias
@@ -2602,7 +2602,7 @@ msgstr "Výchozí"
 #. module: mail
 #: model:ir.model.fields,field_description:mail.field_discuss_channel__default_display_mode
 msgid "Default Display Mode"
-msgstr ""
+msgstr "Výchozí režim zobrazení"
 
 #. module: mail
 #: model:ir.model.fields,field_description:mail.field_mail_alias_domain__default_from_email
@@ -4650,6 +4650,8 @@ msgid ""
 "Invalid server name!\n"
 " %s"
 msgstr ""
+"Neplatné jméno serveru!\n"
+" %s"
 
 #. module: mail
 #. odoo-python
@@ -4774,7 +4776,7 @@ msgstr ""
 #. module: mail
 #: model:ir.model.fields,field_description:mail.field_discuss_channel__is_editable
 msgid "Is Editable"
-msgstr ""
+msgstr "Je upravitelné"
 
 #. module: mail
 #: model:ir.model.fields,field_description:mail.field_mail_compose_message__is_mail_template_editor
@@ -10211,7 +10213,7 @@ msgstr "Napsat zpětnou vazbu"
 #. module: mail
 #: model_terms:ir.ui.view,arch_db:mail.email_compose_message_wizard_form
 msgid "Write your message here..."
-msgstr ""
+msgstr "Svou zprávu napište zde..."
 
 #. module: mail
 #. odoo-python

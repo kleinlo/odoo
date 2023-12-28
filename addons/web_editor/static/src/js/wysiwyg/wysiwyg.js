@@ -51,7 +51,6 @@ const OdooEditor = OdooEditorLib.OdooEditor;
 const getDeepRange = OdooEditorLib.getDeepRange;
 const getInSelection = OdooEditorLib.getInSelection;
 const isProtected = OdooEditorLib.isProtected;
-const isBlock = OdooEditorLib.isBlock;
 const rgbToHex = OdooEditorLib.rgbToHex;
 const preserveCursor = OdooEditorLib.preserveCursor;
 const closestElement = OdooEditorLib.closestElement;
@@ -132,7 +131,7 @@ export class Wysiwyg extends Component {
         }),
     }
     imageCropProps = useState({
-        rpc: this._rpc.bind(this),
+        rpc: this._serviceRpc.bind(this),
         showCount: 0,
         media: undefined,
         mimetype: undefined,
@@ -1376,7 +1375,8 @@ export class Wysiwyg extends Component {
                         onDestroy: () => {
                             removeHintClasses();
                             this.linkToolsInfos.onDestroy();
-                        }
+                        },
+                        getColorpickerTemplate: this.getColorpickerTemplate.bind(this),
                     };
                 }
                 // update the shouldFocusUrl prop to focus on url when double click and click edit link
@@ -2064,10 +2064,6 @@ export class Wysiwyg extends Component {
         }
 
         this.odooEditor.automaticStepSkipStack();
-        // Clear "d-none" for button groups.
-        for (const buttonGroup of this.toolbarEl.querySelectorAll('.btn-group')) {
-            buttonGroup.classList.remove('d-none');
-        }
         // We need to use the editor's window so the tooltip displays in its
         // document even if it's in an iframe.
         const editorWindow = this.odooEditor.document.defaultView;
@@ -2078,6 +2074,7 @@ export class Wysiwyg extends Component {
         // snippet is a media.
         const isInMedia = $target.is(mediaSelector) && !$target.parent().hasClass('o_stars') && e.target &&
             (e.target.isContentEditable || (e.target.parentElement && e.target.parentElement.isContentEditable));
+        this.toolbarEl.classList.toggle('oe-media', isInMedia);
 
         for (const el of this.toolbarEl.querySelectorAll([
             '#image-preview',
@@ -2113,13 +2110,12 @@ export class Wysiwyg extends Component {
             '#justifyFull',
             '#list',
             '#colorInputButtonGroup',
-            '#create-link',
             '#media-insert', // "Insert media" should be replaced with "Replace media".
         ].join(','))){
             el.classList.toggle('d-none', isInMedia);
         }
         // Some icons are relevant for icons, that aren't for other media.
-        for (const el of this.toolbarEl.querySelectorAll('#colorInputButtonGroup, #create-link')) {
+        for (const el of this.toolbarEl.querySelectorAll('#colorInputButtonGroup')) {
             el.classList.toggle('d-none', isInMedia && !$target.is('.fa'));
         }
         for (const el of this.toolbarEl.querySelectorAll('.only_fa')) {
@@ -2135,17 +2131,6 @@ export class Wysiwyg extends Component {
                 el.classList.toggle('d-none', true);
             }
         }
-        // Hide the create-link button if the selection spans several blocks.
-        selection = this.odooEditor.document.getSelection();
-        const range = selection && selection.rangeCount && selection.getRangeAt(0);
-        const $rangeContainer = range && $(range.commonAncestorContainer);
-        const spansBlocks = range && !!$rangeContainer.contents().filter((i, node) => isBlock(node)).length;
-        if (!range || spansBlocks) {
-            this.toolbarEl.querySelector('#create-link')?.classList.toggle('d-none', true);
-        }
-        // Toggle unlink button. Always hide it on media.
-        const linkNode = getInSelection(this.odooEditor.document, 'a');
-        this.toolbarEl.querySelector('#unlink')?.classList.toggle('d-none', !linkNode || isInMedia);
         // Toggle the toolbar arrow.
         this.toolbarEl.classList.toggle('noarrow', isInMedia);
         // Unselect all media.
@@ -2178,18 +2163,10 @@ export class Wysiwyg extends Component {
                 }
                 // Tooltips need to be cleared before leaving the editor.
                 this.saving_mutex.exec(() => {
-                    this.odooEditor.observerUnactive();
                     const removeTooltip = this.popover.add(e.target, Tooltip, { tooltip: _t('Double-click to edit') });
-                    this.odooEditor.observerActive();
                     this.tooltipTimeouts.push(setTimeout(() => removeTooltip(), 800));
                 });
             }, 400));
-        }
-        // Hide button groups that have no visible buttons.
-        for (const buttonGroup of this.toolbarEl.querySelectorAll('.btn-group:not(.d-none)')) {
-            if (!buttonGroup.querySelector('.btn:not(.d-none)')) {
-                buttonGroup.classList.add('d-none');
-            }
         }
         // Toolbar might have changed size, update its position.
         this.odooEditor.updateToolbarPosition();
@@ -2708,7 +2685,9 @@ export class Wysiwyg extends Component {
         ], {
             context: {
                 ...context,
-                delay_translations: true,
+                // TODO: Restore the delay translation feature once it's fixed,
+                //       see commit msg for more info.
+                delay_translations: false,
             },
         });
         return result;
@@ -2749,9 +2728,10 @@ export class Wysiwyg extends Component {
         }
     }
     _onSelectionChange() {
-        if (this.odooEditor.autohideToolbar) {
-            const isVisible = this.linkPopover && this.linkPopover.el.offsetParent;
-            if (isVisible && !this.odooEditor.document.getSelection().isCollapsed) {
+        if (this.odooEditor.autohideToolbar && this.linkPopover) {
+            const selectionInLink = getInSelection(this.odooEditor.document, 'a') === this.linkPopover.target;
+            const isVisible = this.linkPopover.el.offsetParent;
+            if (isVisible && !selectionInLink) {
                 this.linkPopover.hide();
             }
         }
@@ -3503,9 +3483,6 @@ export class Wysiwyg extends Component {
             silent: settings.shadow,
             xhr: settings.xhr,
         });
-    }
-    _rpc({ route,  params }) {
-        return this._serviceRpc(route, params)
     }
 }
 Wysiwyg.activeCollaborationChannelNames = new Set();

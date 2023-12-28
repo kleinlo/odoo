@@ -1755,7 +1755,7 @@ msgstr "Leer más"
 #. module: website_blog
 #: model_terms:ir.ui.view,arch_db:website_blog.posts_loop
 msgid "Read more <i class=\"oi oi-chevron-right ms-2\"/>"
-msgstr ""
+msgstr "Leer más <i class=\"oi oi-chevron-right ms-2\"/>"
 
 #. module: website_blog
 #: model_terms:blog.post,content:website_blog.blog_post_3
@@ -2073,7 +2073,7 @@ msgstr "Lista de etiquetas"
 #. module: website_blog
 #: model:ir.model.constraint,message:website_blog.constraint_blog_tag_category_name_uniq
 msgid "Tag category already exists!"
-msgstr ""
+msgstr "Ya existe esta categoría de etiquetas"
 
 #. module: website_blog
 #: model:ir.model.constraint,message:website_blog.constraint_blog_tag_name_uniq
@@ -2624,7 +2624,7 @@ msgstr ""
 "Siempre debes considerar cuidadosamente el tipo de instalaciones que "
 "necesitas desde tu dormitorio y encontrar el hotel que tenga las que "
 "consideres importantes. El sitio web del directorio de hoteles debe detallar"
-" cuestiones tales como: tamaño de la cama, acceso a Internet (su costo, ya "
+" cuestiones tales como: tamaño de la cama, acceso a Internet (su coste, ya "
 "sea que haya WIFI o conexión de banda ancha por cable), servicios de "
 "cortesía, vistas desde la habitación y ofertas de lujo como un menú de "
 "almohadas o un menú de baño, elección de habitaciones para fumadores o no "

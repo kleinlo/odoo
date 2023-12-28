@@ -400,7 +400,7 @@ msgstr ""
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.view_product_image_form
 msgid "<span>Video Preview</span>"
-msgstr "<span>Video preview</span>"
+msgstr "<span>Video voorbeeld</span>"
 
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.payment
@@ -2630,7 +2630,7 @@ msgstr "Aantal producten in de matrix van de shop"
 #. module: website_sale
 #: model:ir.model.fields,field_description:website_sale.field_res_config_settings__module_website_sale_picking
 msgid "On Site Payments & Picking"
-msgstr "Betalen & picken ter plaatse"
+msgstr "Betalen & ophalen"
 
 #. module: website_sale
 #. odoo-python
@@ -4114,7 +4114,7 @@ msgstr ""
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.snippet_options
 msgid "Top"
-msgstr "Top"
+msgstr "Boven"
 
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.snippet_options
@@ -4205,7 +4205,7 @@ msgstr "Upload een bestand vanuit je lokale bibliotheek."
 #: model_terms:ir.ui.view,arch_db:website_sale.res_config_settings_view_form
 msgid "Use Google Places API to validate addresses entered by your visitors"
 msgstr ""
-"Gebruik Google Places API om adressen te valideren die door je bezoekers "
+"Gebruik Google Places API om adressen te bevestigen die door je bezoekers "
 "zijn ingevoerd"
 
 #. module: website_sale
@@ -4336,7 +4336,7 @@ msgid ""
 "promising to repair or replace it if necessary within a specified period of "
 "time."
 msgstr ""
-"Garantie, afgegeven aan de koper van een artikel van de leverancier, met de "
+"Garantie, afgegeven aan de koper van een artikel van de fabrikant, met de "
 "garantie om te repareren of te vervangen als dat nodig is binnen een "
 "bepaalde tijdsperiode."
 

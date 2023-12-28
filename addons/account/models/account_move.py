@@ -28,6 +28,7 @@ from odoo.tools import (
     formatLang,
     frozendict,
     get_lang,
+    groupby,
     index_exists,
     is_html_empty,
 )
@@ -174,6 +175,7 @@ class AccountMove(models.Model):
         string="Statement Line",
         copy=False,
         check_company=True,
+        index='btree_not_null',
     )
     statement_id = fields.Many2one(
         related="statement_line_id.statement_id"
@@ -226,6 +228,7 @@ class AccountMove(models.Model):
         comodel_name='account.move',
         string='First recurring entry',
         readonly=True, copy=False,
+        index='btree_not_null',
     )
     hide_post_button = fields.Boolean(compute='_compute_hide_post_button', readonly=True)
     to_check = fields.Boolean(
@@ -304,6 +307,7 @@ class AccountMove(models.Model):
         inverse='_inverse_partner_id',
         check_company=True,
         change_default=True,
+        index=True,
         ondelete='restrict',
     )
     commercial_partner_id = fields.Many2one(
@@ -1208,6 +1212,7 @@ class AccountMove(models.Model):
             else:
                 move.invoice_payments_widget = False
 
+    @api.depends_context('lang')
     @api.depends(
         'invoice_line_ids.currency_rate',
         'invoice_line_ids.tax_base_amount',
@@ -1395,11 +1400,11 @@ class AccountMove(models.Model):
 
     @api.depends('company_id.account_fiscal_country_id', 'fiscal_position_id', 'fiscal_position_id.country_id', 'fiscal_position_id.foreign_vat')
     def _compute_tax_country_id(self):
-        for record in self:
-            if record.fiscal_position_id.foreign_vat:
-                record.tax_country_id = record.fiscal_position_id.country_id
-            else:
-                record.tax_country_id = record.company_id.account_fiscal_country_id
+        foreign_vat_records = self.filtered(lambda r: r.fiscal_position_id.foreign_vat)
+        for fiscal_position_id, record_group in groupby(foreign_vat_records, key=lambda r: r.fiscal_position_id):
+            self.env['account.move'].concat(*record_group).tax_country_id = fiscal_position_id.country_id
+        for company_id, record_group in groupby((self-foreign_vat_records), key=lambda r: r.company_id):
+            self.env['account.move'].concat(*record_group).tax_country_id = company_id.account_fiscal_country_id
 
     @api.depends('tax_country_id')
     def _compute_tax_country_code(self):
@@ -1668,6 +1673,11 @@ class AccountMove(models.Model):
 
     @api.onchange('company_id')
     def _inverse_company_id(self):
+        for move in self:
+            # This can't be caught by a python constraint as it is only triggered at save and the compute method that
+            # needs this data to be set correctly before saving
+            if not move.company_id:
+                raise ValidationError(_("We can't leave this document without any company. Please select a company for this document."))
         self._conditional_add_to_compute('journal_id', lambda m: (
             not m.journal_id.filtered_domain(self.env['account.journal']._check_company_domain(m.company_id))
         ))
@@ -2391,6 +2401,13 @@ class AccountMove(models.Model):
             del vals['invoice_line_ids']
         return vals
 
+    def _stolen_move(self, vals):
+        for command in vals.get('line_ids', ()):
+            if command[0] == Command.LINK:
+                yield self.env['account.move.line'].browse(command[1]).move_id.id
+            if command[0] == Command.SET:
+                yield from self.env['account.move.line'].browse(command[2]).move_id.ids
+
     @api.model_create_multi
     def create(self, vals_list):
         if any('state' in vals and vals.get('state') == 'posted' for vals in vals_list):
@@ -2398,8 +2415,11 @@ class AccountMove(models.Model):
         container = {'records': self}
         with self._check_balanced(container):
             with self._sync_dynamic_lines(container):
-                moves = super().create([self._sanitize_vals(vals) for vals in vals_list])
-                container['records'] = moves
+                for vals in vals_list:
+                    self._sanitize_vals(vals)
+                stolen_moves = self.browse(set(move for vals in vals_list for move in self._stolen_move(vals)))
+                moves = super().create(vals_list)
+                container['records'] = moves | stolen_moves
             for move, vals in zip(moves, vals_list):
                 if 'tax_totals' in vals:
                     move.tax_totals = vals['tax_totals']
@@ -2442,7 +2462,8 @@ class AccountMove(models.Model):
             field = self._fields[fname]
             if field.compute and not field.readonly:
                 to_protect.append(field)
-        container = {'records': self}
+        stolen_moves = self.browse(set(move for move in self._stolen_move(vals)))
+        container = {'records': self | stolen_moves}
         with self.env.protecting(to_protect, self), self._check_balanced(container):
             with self._sync_dynamic_lines(container):
                 res = super(AccountMove, self.with_context(
@@ -3915,7 +3936,7 @@ class AccountMove(models.Model):
             'target': 'new',
             'context': {
                 'active_ids': self.ids,
-                'default_mail_template_id': template.id,
+                'default_mail_template_id': template and template.id or False,
             },
         }
 
@@ -4057,21 +4078,26 @@ class AccountMove(models.Model):
         )
 
     def _notify_get_recipients_groups(self, message, model_description, msg_vals=None):
-        groups = super()._notify_get_recipients_groups(
-            message, model_description, msg_vals=msg_vals)
-        local_msg_vals = dict(msg_vals or {})
+        groups = super()._notify_get_recipients_groups(message, model_description, msg_vals=msg_vals)
+        self.ensure_one()
+
         if self.move_type != 'entry':
-            # This allows partners added to the email list in the sending wizard to access this document.
-            for group_name, _group_method, group_data in groups:
-                if group_name == 'customer' and self._portal_ensure_token():
-                    access_link = self._notify_get_action_link(
-                        'view', **local_msg_vals, access_token=self.access_token)
-                    group_data.update({
-                        'has_button_access': True,
-                        'button_access': {
-                            'url': access_link,
-                        },
-                    })
+            local_msg_vals = dict(msg_vals or {})
+            self._portal_ensure_token()
+            access_link = self._notify_get_action_link('view', **local_msg_vals, access_token=self.access_token)
+
+            # Create a new group for partners that have been manually added as recipients.
+            # Those partners should have access to the invoice.
+            button_access = {'url': access_link} if access_link else {}
+            recipient_group = (
+                'additional_intended_recipient',
+                lambda pdata: pdata['id'] in local_msg_vals.get('partner_ids', []) and pdata['id'] != self.partner_id.id,
+                {
+                    'has_button_access': True,
+                    'button_access': button_access,
+                }
+            )
+            groups.insert(0, recipient_group)
 
         return groups
 

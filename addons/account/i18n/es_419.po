@@ -4969,7 +4969,7 @@ msgstr "Diario de cambio de divisa"
 #. module: account
 #: model:ir.model.fields,field_description:account.field_account_move_line__currency_rate
 msgid "Currency Rate"
-msgstr "Tasa de divisa"
+msgstr "Tasa de cambio"
 
 #. module: account
 #. odoo-python
@@ -10760,7 +10760,7 @@ msgstr "Advertencia de crédito del contacto"
 #. module: account
 #: model:ir.actions.act_window,name:account.action_account_moves_ledger_partner
 msgid "Partner Ledger"
-msgstr "Libro mayor del contacto"
+msgstr "Libro mayor de clientes"
 
 #. module: account
 #: model:ir.model.fields,field_description:account.field_res_partner__use_partner_credit_limit

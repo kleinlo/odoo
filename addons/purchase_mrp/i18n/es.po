@@ -51,11 +51,13 @@ msgstr "Línea de Lista de Materiales"
 #, python-format
 msgid "Components cost share have to be positive or equals to zero."
 msgstr ""
+"El coste compartido de los componentes tiene que ser positivo o igual a "
+"cero."
 
 #. module: purchase_mrp
 #: model:ir.model.fields,field_description:purchase_mrp.field_mrp_bom_line__cost_share
 msgid "Cost Share (%)"
-msgstr "Reparto de costos (%)"
+msgstr "Reparto de costes (%)"
 
 #. module: purchase_mrp
 #: model:ir.model.fields,field_description:purchase_mrp.field_purchase_order__mrp_production_count
@@ -128,6 +130,8 @@ msgid ""
 "The percentage of the component repartition cost when purchasing a kit.The "
 "total of all components' cost have to be equal to 100."
 msgstr ""
+"El porcentaje del coste de repartición del componente cuando se compra un "
+"kit. El total del coste de todos los componentes debe ser igual a 100."
 
 #. module: purchase_mrp
 #. odoo-python
@@ -135,3 +139,5 @@ msgstr ""
 #, python-format
 msgid "The total cost share for a BoM's component have to be 100"
 msgstr ""
+"El total del reparto de costes para un componente de la lista de materiales "
+"debe ser 100"

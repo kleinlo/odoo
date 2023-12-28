@@ -2,6 +2,7 @@
 
 import { loadEmoji } from "@web/core/emoji_picker/emoji_picker";
 import { DEFAULT_AVATAR } from "@mail/core/common/persona_service";
+import { Record } from "@mail/core/common/record";
 import { prettifyMessageContent } from "@mail/utils/common/format";
 
 import { browser } from "@web/core/browser/browser";
@@ -10,6 +11,7 @@ import { registry } from "@web/core/registry";
 import { memoize } from "@web/core/utils/functions";
 import { url } from "@web/core/utils/urls";
 import { escape } from "@web/core/utils/strings";
+import { compareDatetime } from "@mail/utils/common/misc";
 
 const FETCH_LIMIT = 30;
 
@@ -255,12 +257,14 @@ export class ThreadService {
             // same for needaction messages, special case for mailbox:
             // kinda "fetch new/more" with needactions on many origin threads at once
             if (thread.eq(this.store.discuss.inbox)) {
-                for (const message of fetched) {
-                    const thread = message.originThread;
-                    if (message.notIn(thread.needactionMessages)) {
-                        thread.needactionMessages.unshift(message);
+                Record.MAKE_UPDATE(() => {
+                    for (const message of fetched) {
+                        const thread = message.originThread;
+                        if (thread && message.notIn(thread.needactionMessages)) {
+                            thread.needactionMessages.unshift(message);
+                        }
                     }
-                }
+                });
             } else {
                 const startNeedactionIndex =
                     after === undefined
@@ -298,6 +302,7 @@ export class ThreadService {
     async loadAround(thread, messageId) {
         if (!thread.messages.some(({ id }) => id === messageId)) {
             thread.isLoaded = false;
+            thread.scrollTop = undefined;
             const { messages } = await this.rpc(this.getFetchRoute(thread), {
                 ...this.getFetchParams(thread),
                 around: messageId,
@@ -315,8 +320,6 @@ export class ThreadService {
                 }
             }
             this._enrichMessagesWithTransient(thread);
-            // Give some time to the UI to update.
-            await new Promise((resolve) => setTimeout(() => requestAnimationFrame(resolve)));
         }
     }
 
@@ -330,13 +333,18 @@ export class ThreadService {
         }
         if (ids.length) {
             const previews = await this.orm.call("discuss.channel", "channel_fetch_preview", [ids]);
-            for (const preview of previews) {
-                const thread = this.store.Thread.get({ model: "discuss.channel", id: preview.id });
-                const message = this.store.Message.insert(preview.last_message, { html: true });
-                if (message.isNeedaction) {
-                    thread.needactionMessages.add(message);
+            Record.MAKE_UPDATE(() => {
+                for (const preview of previews) {
+                    const thread = this.store.Thread.get({
+                        model: "discuss.channel",
+                        id: preview.id,
+                    });
+                    const message = this.store.Message.insert(preview.last_message, { html: true });
+                    if (message.isNeedaction) {
+                        thread.needactionMessages.add(message);
+                    }
                 }
-            }
+            });
         }
     });
 
@@ -422,7 +430,8 @@ export class ThreadService {
             String.prototype.localeCompare.call(t1.name, t2.name)
         );
         this.store.discuss.chats.threads.sort(
-            (t1, t2) => t2.lastInterestDateTime.ts - t1.lastInterestDateTime.ts
+            (t1, t2) =>
+                compareDatetime(t2.lastInterestDateTime, t1.lastInterestDateTime) || t2.id - t1.id
         );
     }
 

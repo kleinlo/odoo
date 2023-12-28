@@ -45,7 +45,7 @@ class TestPoSSale(TestPointOfSaleHttpCommon):
         self.bom_a = bom_product_form.save()
 
         sale_order = self.env['sale.order'].create({
-            'partner_id': self.env.ref('base.res_partner_2').id,
+            'partner_id': self.env['res.partner'].create({'name': 'Test Partner'}).id,
             'order_line': [(0, 0, {
                 'product_id': self.kit.id,
                 'name': self.kit.name,
@@ -99,14 +99,16 @@ class TestPoSSale(TestPointOfSaleHttpCommon):
             'lst_price': 11,
             'taxes_id': [odoo.Command.clear()],
         })
+        partner_1 = self.env['res.partner'].create({'name': 'Test Partner 1'})
+        partner_2 = self.env['res.partner'].create({'name': 'Test Partner 2'})
         self.env['sale.order'].create({
-            'partner_id': self.env.ref('base.res_partner_1').id,
-            'partner_shipping_id': self.env.ref('base.res_partner_2').id,
+            'partner_id': partner_1.id,
+            'partner_shipping_id': partner_2.id,
             'order_line': [(0, 0, {'product_id': product1.id})],
         })
         self.env['sale.order'].create({
-            'partner_id': self.env.ref('base.res_partner_1').id,
-            'partner_shipping_id': self.env.ref('base.res_partner_1').id,
+            'partner_id': partner_1.id,
+            'partner_shipping_id': partner_1.id,
             'order_line': [(0, 0, {'product_id': product2.id})],
         })
         self.main_pos_config.open_ui()
@@ -131,7 +133,7 @@ class TestPoSSale(TestPointOfSaleHttpCommon):
         })
         #create a sale order with 2 lines
         sale_order = self.env['sale.order'].create({
-            'partner_id': self.env.ref('base.res_partner_2').id,
+            'partner_id': self.env['res.partner'].create({'name': 'Test Partner'}).id,
             'order_line': [(0, 0, {
                 'product_id': product_a.id,
                 'name': product_a.name,
@@ -166,7 +168,7 @@ class TestPoSSale(TestPointOfSaleHttpCommon):
     def test_downpayment_refund(self):
         #create a sale order
         sale_order = self.env['sale.order'].create({
-            'partner_id': self.env.ref('base.res_partner_2').id,
+            'partner_id': self.env['res.partner'].create({'name': 'Test Partner'}).id,
             'order_line': [(0, 0, {
                 'product_id': self.product_a.id,
                 'name': self.product_a.name,
@@ -190,6 +192,7 @@ class TestPoSSale(TestPointOfSaleHttpCommon):
         self.assertEqual(len(sale_order.order_line), 3)
         self.assertEqual(sale_order.order_line[1].qty_invoiced, 1)
         self.assertEqual(sale_order.order_line[2].qty_invoiced, -1)
+
     def test_settle_order_unreserve_order_lines(self):
         #create a product category that use the closest location for the removal strategy
         self.removal_strategy = self.env['product.removal'].search([('method', '=', 'closest')], limit=1)
@@ -233,7 +236,7 @@ class TestPoSSale(TestPointOfSaleHttpCommon):
         quants.action_apply_inventory()
 
         sale_order = self.env['sale.order'].create({
-            'partner_id': self.env.ref('base.res_partner_2').id,
+            'partner_id': self.env['res.partner'].create({'name': 'Test Partner'}).id,
             'order_line': [(0, 0, {
                 'product_id': self.product.id,
                 'name': self.product.name,
@@ -276,7 +279,7 @@ class TestPoSSale(TestPointOfSaleHttpCommon):
         })
         #create a sale order with 2 lines
         sale_order = self.env['sale.order'].create({
-            'partner_id': self.env.ref('base.res_partner_2').id,
+            'partner_id': self.env['res.partner'].create({'name': 'Test Partner'}).id,
             'order_line': [(0, 0, {
                 'product_id': product_a.id,
                 'name': product_a.name,
@@ -316,15 +319,45 @@ class TestPoSSale(TestPointOfSaleHttpCommon):
             'uom_po_id': uom.id,
         })
         #create a sale order with product_a
-        self.env['sale.order'].create({
+        sale_order = self.env['sale.order'].create({
             'partner_id': self.env.ref('base.res_partner_2').id,
             'order_line': [(0, 0, {
                 'product_id': product_a.id,
                 'name': product_a.name,
                 'product_uom_qty': 3.5,
                 'product_uom': product_a.uom_id.id,
-                'price_unit': product_a.lst_price,
+                'price_unit': 8,  # manually set a different price than the lst_price
             })],
         })
+        self.assertEqual(sale_order.amount_total, 32.2)  # 3.5 * 8 * 1.15
         self.main_pos_config.open_ui()
         self.start_tour("/pos/ui?config_id=%d" % self.main_pos_config.id, 'PosSettleOrderNotGroupable', login="accountman")
+
+    def test_customer_notes(self):
+        """This test create an order and settle it in the PoS. It also uses multistep delivery
+            and we need to make sure that all the picking are cancelled if the order is fully delivered.
+        """
+
+        #create a sale order with 2 customer notes
+        sale_order = self.env['sale.order'].create({
+            'partner_id': self.env.ref('base.res_partner_2').id,
+            'note': 'Customer note 1',
+            'order_line': [(0, 0, {
+                'product_id': self.whiteboard_pen.id,
+                'name': self.whiteboard_pen.name,
+                'product_uom_qty': 1,
+                'product_uom': self.whiteboard_pen.uom_id.id,
+                'price_unit': self.whiteboard_pen.lst_price,
+            }), (0, 0, {
+                'name': 'Customer note 2',
+                'display_type': 'line_note',
+            }), (0, 0, {
+                'name': 'Customer note 3',
+                'display_type': 'line_note',
+            })],
+        })
+
+        sale_order.action_confirm()
+
+        self.main_pos_config.open_ui()
+        self.start_tour("/pos/ui?config_id=%d" % self.main_pos_config.id, 'PosSettleOrderWithNote', login="accountman")

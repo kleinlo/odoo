@@ -22,11 +22,13 @@
 # JanaAvalah, 2023
 # Rivo Zängov <eraser@eraser.ee>, 2023
 # Triine Aavik <triine@avalah.ee>, 2023
-# Eneli Õigus <enelioigus@gmail.com>, 2023
 # Piia Paurson <piia@avalah.ee>, 2023
-# Anna, 2023
-# Leaanika Randmets, 2023
 # Martin Talts <martin.t@avalah.ee>, 2023
+# Katrin Kampura, 2023
+# Mihkel avalah, 2023
+# Anna, 2023
+# Eneli Õigus <enelioigus@gmail.com>, 2023
+# Leaanika Randmets, 2023
 # 
 msgid ""
 msgstr ""
@@ -34,7 +36,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 21:55+0000\n"
 "PO-Revision-Date: 2023-10-26 23:09+0000\n"
-"Last-Translator: Martin Talts <martin.t@avalah.ee>, 2023\n"
+"Last-Translator: Leaanika Randmets, 2023\n"
 "Language-Team: Estonian (https://app.transifex.com/odoo/teams/41243/et/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -8095,6 +8097,11 @@ msgid ""
 "- Private: Private addresses are only visible by authorized users and contain sensitive data (employee home addresses, ...).\n"
 "- Other: Other address for the company (e.g. subsidiary, ...)"
 msgstr ""
+"- Kontakt: antud ettevõttega seotud kontaktid  (nt. Tegevjuht, müügijuht, raamatupidaja, ...).\n"
+"- Arve aadress : Eelistatud aadress kõikidele arvetele. Vaikimisi valitud, kui esitate sellele ettevõttele arve.\n"
+"- Tarneaadress : Eelistatud aadress kõikide tarnete jaoks. Vaikimisi valitud, kui tarnite sellele ettevõttele kuuluva tellimuse.\n"
+"- Privaatne aadress: privaatset kontakti näevad ainult volitatud kasutajad, kuna need sisaldavad delikaatseid isikuandmeid (töötaja kodune aadress, ...).\n"
+"- Muu aadress: teised ettevõttega seotud kontaktid (nt. tütarettevõtted, ...)"
 
 #. module: base
 #. odoo-python
@@ -8441,7 +8448,7 @@ msgstr ""
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.res_partner_kanban_view
 msgid "<span class=\"text-bg-danger\">Archived</span>"
-msgstr ""
+msgstr "<span class=\"text-bg-danger\">Arhiveeritud</span>"
 
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.demo_force_install_form
@@ -10257,7 +10264,7 @@ msgstr "Kõik, mida vajate, tegemaks finantskonsolideerimist."
 #. module: base
 #: model:ir.module.module,summary:base.module_hr_holidays
 msgid "Allocate PTOs and follow leaves requests"
-msgstr ""
+msgstr "Määra puudumisi ja jälgi puudumiste taotlusi"
 
 #. module: base
 #: model:ir.module.module,summary:base.module_helpdesk_fsm
@@ -12775,7 +12782,7 @@ msgstr ""
 #: model_terms:res.partner,website_description:base.res_partner_10
 #: model_terms:res.partner,website_description:base.res_partner_12
 msgid "Come see us live, we hope to meet you!"
-msgstr ""
+msgstr "Tule meid vaatama!"
 
 #. module: base
 #: model:ir.model.fields.selection,name:base.selection__report_paperformat__format__comm10e
@@ -14434,7 +14441,7 @@ msgstr "Vaikimisi väärtus (JSON format)"
 #. module: base
 #: model:ir.model,name:base.model_ir_default
 msgid "Default Values"
-msgstr "Vaikimis väärtus"
+msgstr "Vaikeväärtused"
 
 #. module: base
 #: model:ir.model.fields,help:base.field_ir_actions_act_window__limit
@@ -17021,13 +17028,13 @@ msgstr ""
 #. module: base
 #: model:ir.module.module,summary:base.module_sale_management
 msgid "From quotations to invoices"
-msgstr "Müügipakkumisest arveks"
+msgstr "Müügipakkumisest arveni"
 
 #. module: base
 #: model:ir.module.category,name:base.module_category_human_resources_frontdesk
 #: model:ir.module.module,shortdesc:base.module_frontdesk
 msgid "Frontdesk"
-msgstr ""
+msgstr "Vastuvõtt"
 
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.ir_access_view_search
@@ -19059,6 +19066,7 @@ msgstr "Integreerige oma postkast projektidega"
 #: model:ir.module.module,summary:base.module_whatsapp
 msgid "Integrates Odoo with WhatsApp to use WhatsApp messaging service"
 msgstr ""
+"Integreeri Odoo WhatsApp'iga, et saaksid kasutada WhatsAppi sõnumiteenuseid"
 
 #. module: base
 #: model:ir.module.module,summary:base.module_hr_payroll_fleet
@@ -20652,7 +20660,7 @@ msgstr "Hooldus - materjali nõuete planeerimine"
 #. module: base
 #: model:ir.module.module,summary:base.module_voip
 msgid "Make and receive phone calls from within Odoo."
-msgstr ""
+msgstr "Helista ja võta telefonikõnesid vastu Odoos"
 
 #. module: base
 #: model:res.country,name:base.mw
@@ -20930,7 +20938,7 @@ msgstr "Halda oma allkirjastatavaid dokumente lepingute all"
 #. module: base
 #: model:ir.module.module,summary:base.module_hr_payroll
 msgid "Manage your employee payroll records"
-msgstr "Hallake oma töötajate palgaarvestust."
+msgstr "Halda töötajate palgaarvestust"
 
 #. module: base
 #: model:ir.module.module,summary:base.module_planning
@@ -25154,7 +25162,7 @@ msgstr "Privaatsus"
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.res_partner_view_form_private
 msgid "Private Address Form"
-msgstr "Koduse aadressi vorm"
+msgstr "Privaatse aadressi vorm"
 
 #. module: base
 #. odoo-python
@@ -26198,7 +26206,7 @@ msgstr "Taaslae manusest"
 #: model:ir.module.category,name:base.module_category_human_resources_remote_work
 #: model:ir.module.module,shortdesc:base.module_hr_homeworking
 msgid "Remote Work"
-msgstr ""
+msgstr "Kaugtöö"
 
 #. module: base
 #: model:ir.model.fields.selection,name:base.selection__ir_asset__directive__remove
@@ -29570,7 +29578,7 @@ msgstr ""
 #: code:addons/models.py:0
 #, python-format
 msgid "The following languages are not activated: %(missing_names)s"
-msgstr ""
+msgstr "Järgnevad keeled pole aktiveeritud: %(missing_names)s"
 
 #. module: base
 #. odoo-python
@@ -30556,6 +30564,8 @@ msgstr ""
 msgid ""
 "This module integrates Odoo with WhatsApp to use WhatsApp messaging service"
 msgstr ""
+"Antud moodul integreerib Odoo WhatsApp'iga, et oleks võimalik kasutada "
+"WhatsAppi sõnumiteenuseid"
 
 #. module: base
 #: model:ir.module.module,description:base.module_whatsapp_pos
@@ -30879,7 +30889,7 @@ msgstr "Jälgi töötaja kohalolekut"
 #: model:ir.module.module,summary:base.module_hr_timesheet
 #: model:ir.module.module,summary:base.module_timesheet_grid
 msgid "Track employee time on tasks"
-msgstr "Jälgi töötaja aega ülesannetel"
+msgstr "Logi aega tööülesannetel"
 
 #. module: base
 #: model:ir.module.module,summary:base.module_maintenance
@@ -30889,12 +30899,12 @@ msgstr "Jälgige seadmeid ja hallake hooldustaotlusi"
 #. module: base
 #: model:ir.module.module,summary:base.module_crm
 msgid "Track leads and close opportunities"
-msgstr "Jälgige müügivihjeid ja sulgege võimalusi"
+msgstr "Jälgi, liiguta ja sulge müügivihjeid"
 
 #. module: base
 #: model:ir.module.module,summary:base.module_hr_recruitment
 msgid "Track your recruitment pipeline"
-msgstr "Jälgige oma värbamistoru"
+msgstr "Jälgi oma värbamistoru"
 
 #. module: base
 #: model:ir.module.module,summary:base.module_helpdesk

@@ -11,6 +11,7 @@ class TestStockFlow(TestStockCommon):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        cls.env.ref('base.group_user').write({'implied_ids': [(4, cls.env.ref('stock.group_production_lot').id)]})
         decimal_product_uom = cls.env.ref('product.decimal_product_uom')
         decimal_product_uom.digits = 3
         cls.partner_company2 = cls.env['res.partner'].create({
@@ -1801,7 +1802,7 @@ class TestStockFlow(TestStockCommon):
             'route_ids': [(4, route_a.id), (4, route_b.id)]
         })
 
-        replenish_wizard = self.env['product.replenish'].create({
+        replenish_wizard = self.env['product.replenish'].with_context(default_product_tmpl_id=product.product_tmpl_id.id).create({
             'product_id': product.id,
             'product_tmpl_id': product.product_tmpl_id.id,
             'product_uom_id': self.uom_unit.id,
@@ -2485,27 +2486,61 @@ class TestStockFlow(TestStockCommon):
         pickings.button_validate()
         self.assertTrue(all(pickings.mapped(lambda p: p.state == 'done')), "Pickings should be set as done")
 
-    def test_pickings_on_duplicated_operation_types(self):
-        """ Ensure we can create pickings on duplicated operation types without collision in names
-            Steps:
-            - Create a picking on an operation type
-            - Duplicate the operation type
-            - Create another picking on the duplicated operation type
-        """
-        self.PickingObj.create({
+    def test_empty_picking_draft(self):
+        """ test an empty still can be reset to draft """
+        picking = self.PickingObj.create({
             'picking_type_id': self.picking_type_in,
-            'location_id': self.supplier_location,
+            'location_id': self.stock_location,
             'location_dest_id': self.stock_location,
         })
-        duplicated_picking_type = self.env['stock.picking.type'].browse(self.picking_type_in).copy()
-        picking_2 = self.PickingObj.create({
-            'picking_type_id': duplicated_picking_type.id,
-            'location_id': self.supplier_location,
+        self.assertFalse(picking.move_ids)
+        self.assertEqual(picking.state, 'draft')
+
+    def test_validate_backorder(self):
+        """ Test That a backorder can be validated:
+            - Create a picking with 2 moves (A and B)
+            - Set the quantity done of A to 2 and B to 0
+            - Validate the picking and create a backorder
+            - Check that the backorder has 2 moves (A with 8 and B with 10)
+            - Validate the backorder
+        """
+        picking = self.env['stock.picking'].create({
+            'picking_type_id': self.picking_type_in,
+            'location_id': self.customer_location,
             'location_dest_id': self.stock_location,
         })
-        # trigger SQL constraints
-        self.PickingObj.flush_model()
-        self.assertEqual(self.PickingObj.search_count([('name', '=', picking_2.name)]), 1)
+        move1 = self.env['stock.move'].create({
+            'name': self.productA.name,
+            'product_id': self.productA.id,
+            'product_uom_qty': 10,
+            'product_uom': self.productA.uom_id.id,
+            'picking_id': picking.id,
+            'location_id': self.customer_location,
+            'location_dest_id': self.stock_location,
+        })
+        move2 = self.env['stock.move'].create({
+            'name': self.productB.name,
+            'product_id': self.productB.id,
+            'product_uom_qty': 10,
+            'product_uom': self.productB.uom_id.id,
+            'picking_id': picking.id,
+            'location_id': self.customer_location,
+            'location_dest_id': self.stock_location,
+        })
+        picking.action_confirm()
+        self.assertRecordValues(picking.move_ids[0], [{'product_id': self.productA.id, 'quantity': 10}])
+        self.assertRecordValues(picking.move_ids[1], [{'product_id': self.productB.id, 'quantity': 10}])
+        # update the quantity recvied
+        move1.quantity = 2
+        move2.quantity = 0
+        res = picking.button_validate()
+        wizard = Form(self.env[res['res_model']].with_context(res['context'])).save()
+        wizard.process()
+        backorder = picking.backorder_ids
+        self.assertRecordValues(backorder.move_ids[0], [{'product_id': self.productB.id, 'quantity': 10}])
+        self.assertRecordValues(backorder.move_ids[1], [{'product_id': self.productA.id, 'quantity': 8}])
+        backorder.button_validate()
+        self.assertEqual(backorder.state, 'done')
 
 
 @tagged('-at_install', 'post_install')

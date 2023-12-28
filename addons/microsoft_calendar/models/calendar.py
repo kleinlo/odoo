@@ -61,7 +61,7 @@ class Meeting(models.Model):
             time_offset = timedelta(minutes=5)
             domain = expression.AND([domain, [('write_date', '>=', self.env.user.microsoft_last_sync_date - time_offset)]])
 
-        self.env['calendar.event'].search(domain).write({
+        self.env['calendar.event'].with_context(dont_notify=True).search(domain).write({
             'need_sync_m': True,
         })
 
@@ -266,6 +266,10 @@ class Meeting(models.Model):
         day_range = int(ICP.get_param('microsoft_calendar.sync.range_days', default=365))
         lower_bound = fields.Datetime.subtract(fields.Datetime.now(), days=day_range)
         upper_bound = fields.Datetime.add(fields.Datetime.now(), days=day_range)
+        # Define 'custom_lower_bound_range' param for limiting old events updates in Odoo and avoid spam on Microsoft.
+        custom_lower_bound_range = ICP.get_param('microsoft_calendar.sync.lower_bound_range')
+        if custom_lower_bound_range:
+            lower_bound = fields.Datetime.subtract(fields.Datetime.now(), days=int(custom_lower_bound_range))
         domain = [
             ('partner_ids.user_ids', 'in', self.env.user.id),
             ('stop', '>', lower_bound),
@@ -637,3 +641,15 @@ class Meeting(models.Model):
         super(Meeting, records)._cancel_microsoft()
         attendees = (self - records).attendee_ids.filtered(lambda a: a.partner_id == user.partner_id)
         attendees.do_decline()
+
+    def _get_event_user_m(self, user_id=None):
+        """ Get the user who will send the request to Microsoft (organizer if synchronized and current user otherwise). """
+        self.ensure_one()
+        # Current user must have access to token in order to access event properties (non-public user).
+        current_user_status = self.env.user._get_microsoft_calendar_token()
+        if user_id != self.env.user and current_user_status:
+            if user_id is None:
+                user_id = self.user_id
+            if user_id and self.with_user(user_id).sudo()._check_microsoft_sync_status():
+                return user_id
+        return self.env.user

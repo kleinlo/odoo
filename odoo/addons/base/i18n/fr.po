@@ -9527,7 +9527,7 @@ msgstr ""
 "\n"
 "        Pour les produits sur lesquels l'option \"Planifier les services\" est activée, vous aurez la possibilité\n"
 "        de prévoir automatiquement les postes pour les employés qui peuvent prendre le poste \n"
-"        (c'est-à-dire les employés qui ont la même fonction que celle configurée sur le produit).\n"
+"        (c'est-à-dire les employés qui ont le même rôle que celui configuré sur le produit).\n"
 "\n"
 "       Prévoyez les postes et gardez un œil sur les heures utilisées sur vos produits planifiables.\n"
 
@@ -9548,7 +9548,7 @@ msgstr ""
 "\n"
 "        Pour les produits sur lesquels l'option \"Planifier les services\" est activée, vous aurez la possibilité\n"
 "        de planifier automatiquement les postes pour les employés qui peuvent prendre le poste \n"
-"        (c'est-à-dire les employés qui ont la même fonction que celle configurée sur le produit).\n"
+"        (c'est-à-dire les employés qui ont le même rôle que celui configuré sur le produit).\n"
 "\n"
 "       Planifiez les postes et gardez un œil sur les heures utilisées sur vos produits planifiables.\n"
 
@@ -37956,7 +37956,7 @@ msgstr "Site web Messagerie"
 #. module: base
 #: model:ir.module.module,shortdesc:base.module_website_mail_group
 msgid "Website Mail Group"
-msgstr "Site web Groupe d'emails"
+msgstr "Groupe de messagerie site web"
 
 #. module: base
 #: model:ir.module.module,summary:base.module_website_mail

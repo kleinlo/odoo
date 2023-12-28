@@ -100,8 +100,8 @@ export class Link extends Component {
 
         this._updateOptionsUI();
 
-        this._setUrl({ shouldFocus: this.props.shouldFocusUrl });
         this.$el[0].querySelector('#o_link_dialog_label_input').value = this.state.originalText;
+        this._setUrl({ shouldFocus: this.props.shouldFocusUrl });
     }
     /**
      * @override
@@ -531,7 +531,7 @@ export class Link extends Component {
                 $node = $node.parent();
             }
             const linkNode = this.$link[0] || this.state.range.cloneContents();
-            const linkText = linkNode.innerText;
+            const linkText = weUtils.getLinkLabel(linkNode);
             this.state.originalText = linkText.replace(/[ \t\r\n]+/g, ' ');
             if (linkNode instanceof DocumentFragment) {
                 this.state.originalHTML = $('<fakeEl>').append(linkNode).html();

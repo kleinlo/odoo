@@ -103,7 +103,7 @@ msgstr "12 päivää / vuosi, mukaan lukien <br>6 valitsemaasi päivää."
 #. module: hr
 #: model_terms:ir.ui.view,arch_db:hr.print_employee_badge
 msgid "12345678901"
-msgstr ""
+msgstr "12345678901"
 
 #. module: hr
 #: model_terms:hr.job,job_details:hr.job_ceo
@@ -369,7 +369,7 @@ msgstr "Toimenpiteen suorittaja"
 #. module: hr
 #: model:ir.model,name:hr.model_mail_activity_plan_template
 msgid "Activity plan template"
-msgstr ""
+msgstr "Toimintasuunnitelman malli"
 
 #. module: hr
 #: model:ir.model,name:hr.model_mail_activity_schedule
@@ -515,7 +515,7 @@ msgstr ""
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_mail_activity_plan_template__responsible_type
 msgid "Assignment"
-msgstr ""
+msgstr "Tehtävä"
 
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_hr_department__message_attachment_count
@@ -2051,7 +2051,7 @@ msgstr "Neuvottelut ja sopimukset"
 #: model_terms:ir.ui.view,arch_db:hr.hr_employee_view_graph
 #: model_terms:ir.ui.view,arch_db:hr.hr_employee_view_pivot
 msgid "New Employees Over Time"
-msgstr ""
+msgstr "Uudet työntekijät eri aikoina"
 
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_hr_employee__newly_hired
@@ -2218,7 +2218,7 @@ msgstr ""
 #. module: hr
 #: model:ir.model.fields.selection,name:hr.selection__hr_work_location__location_type__office
 msgid "Office"
-msgstr ""
+msgstr "Toimisto"
 
 #. module: hr
 #: model:res.groups,name:hr.group_hr_user
@@ -2673,7 +2673,7 @@ msgstr "Liittyvä käyttäjätunnus resurssille sen oikeuksien määrittämiseks
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_res_config_settings__module_hr_homeworking
 msgid "Remote Work"
-msgstr ""
+msgstr "Etätyö"
 
 #. module: hr
 #: model:ir.ui.menu,name:hr.hr_menu_hr_reports

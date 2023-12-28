@@ -68,10 +68,10 @@ class TestAccountMove(AccountTestInvoicingCommon):
         nb_invoices = self.env['account.move'].search_count(domain=[])
         self.test_move.auto_post = 'at_date'
         self.test_move.date = fields.Date.today()
-        with freeze_time(fields.Date.today() - relativedelta(days=1)):
+        with freeze_time(self.test_move.date - relativedelta(days=1)):
             self.env.ref('account.ir_cron_auto_post_draft_entry').method_direct_trigger()
             self.assertEqual(self.test_move.state, 'draft')  # can't be posted before its date
-        with freeze_time(fields.Date.today() + relativedelta(days=1)):
+        with freeze_time(self.test_move.date + relativedelta(days=1)):
             self.env.ref('account.ir_cron_auto_post_draft_entry').method_direct_trigger()
             self.assertEqual(self.test_move.state, 'posted')  # can be posted after its date
         self.assertEqual(nb_invoices, self.env['account.move'].search_count(domain=[]))
@@ -1130,3 +1130,33 @@ class TestAccountMove(AccountTestInvoicingCommon):
             [("account_id", "=", account.id)], ["balance:sum"], ["account_root_id"]
         )[0]["balance"]
         self.assertEqual(balance, 500)
+
+    def test_line_steal(self):
+        honest_move = self.env['account.move'].create({
+            'line_ids': [
+                Command.create({
+                    'name': 'receivable',
+                    'account_id': self.company_data['default_account_receivable'].id,
+                    'balance': 500.0,
+                }),
+                Command.create({
+                    'name': 'tax',
+                    'account_id': self.company_data['default_account_tax_sale'].id,
+                    'balance': -500.0,
+                }),
+            ]
+        })
+        honest_move.action_post()
+
+        with self.assertRaisesRegex(UserError, 'not balanced'), self.env.cr.savepoint():
+            self.env['account.move'].create({'line_ids': [Command.set(honest_move.line_ids[0].ids)]})
+
+        with self.assertRaisesRegex(UserError, 'not balanced'), self.env.cr.savepoint():
+            self.env['account.move'].create({'line_ids': [Command.link(honest_move.line_ids[0].id)]})
+
+        stealer_move = self.env['account.move'].create({})
+        with self.assertRaisesRegex(UserError, 'not balanced'), self.env.cr.savepoint():
+            stealer_move.write({'line_ids': [Command.set(honest_move.line_ids[0].ids)]})
+
+        with self.assertRaisesRegex(UserError, 'not balanced'), self.env.cr.savepoint():
+            stealer_move.write({'line_ids': [Command.link(honest_move.line_ids[0].id)]})

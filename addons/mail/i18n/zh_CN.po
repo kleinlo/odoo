@@ -4,10 +4,10 @@
 # 
 # Translators:
 # 何彬 <vnsoft.he@gmail.com>, 2023
-# Chloe Wang, 2023
 # Wil Odoo, 2023
 # Chill Liao <chill421@qq.com>, 2023
 # 山西清水欧度(QQ:54773801) <54773801@qq.com>, 2023
+# Chloe Wang, 2023
 # Jeffery CHEN <jeffery9@gmail.com>, 2023
 # 
 msgid ""
@@ -453,12 +453,12 @@ msgstr ""
 #. module: mail
 #: model_terms:ir.ui.view,arch_db:mail.account_security_setting_update
 msgid "<span>If this was done by you:</span><br/>"
-msgstr "<span>如果这是您做的：</span><br/>"
+msgstr "<span>如果由您执行此操作：</span><br/>"
 
 #. module: mail
 #: model_terms:ir.ui.view,arch_db:mail.account_security_setting_update
 msgid "<span>If this was not done by you:</span>"
-msgstr "<span>如果这不是您做的：</span>"
+msgstr "<span>如果您并未执行此操作：</span>"
 
 #. module: mail
 #: model_terms:ir.ui.view,arch_db:mail.mail_resend_partner_view_form
@@ -3615,7 +3615,7 @@ msgstr "字段"
 msgid ""
 "Field \"(field)r on model %(model)r must be of type Many2one and have "
 "tracking=True for the computation of duration."
-msgstr "模型%(model)r上的字段\"（字段）r \"必须是 Many2one 类型，并且在计算持续时间时跟踪=True。"
+msgstr "模型 %(model)r 上的字段 \"(field)r 必须是 Many2one 类型，并且在计算持续时间时跟踪=True。"
 
 #. module: mail
 #. odoo-python
@@ -3786,7 +3786,7 @@ msgstr "Font Awesome图标，例如：fa-tasks"
 msgid ""
 "For %(channels)s, channel_type should be 'channel' to have the group-based "
 "authorization or group auto-subscription."
-msgstr "对于 %(channels)s，channel_type应为“通道”，以获得基于组的授权或组自动订阅。"
+msgstr "对于 %(channels)s，channel_type应为“频道”，以获得基于组的授权或组自动订阅。"
 
 #. module: mail
 #. odoo-javascript
@@ -5199,7 +5199,7 @@ msgstr "加载模板"
 #: code:addons/mail/static/src/discuss/core/web/channel_selector.js:0
 #, python-format
 msgid "Loading"
-msgstr "正在加载"
+msgstr "正在加载   稍安勿躁"
 
 #. module: mail
 #: model:ir.model.fields.selection,name:mail.selection__fetchmail_server__server_type__local
@@ -5930,7 +5930,7 @@ msgstr "静音"
 #: code:addons/mail/static/src/discuss/core/common/notification_settings.xml:0
 #, python-format
 msgid "Mute Channel"
-msgstr "静音通道"
+msgstr "静音频道"
 
 #. module: mail
 #: model:ir.model.fields,field_description:mail.field_discuss_channel_member__mute_until_dt
@@ -9090,7 +9090,7 @@ msgstr "此对话中没有消息。"
 #. module: mail
 #: model:ir.model.constraint,message:mail.constraint_discuss_channel_rtc_session_channel_member_unique
 msgid "There can only be one rtc session per channel member"
-msgstr "每个通道成员只能有一个 rtc 会话"
+msgstr "每个频道成员只能有一个 rtc 会话"
 
 #. module: mail
 #: model_terms:ir.ui.view,arch_db:mail.message_origin_link
@@ -9268,7 +9268,7 @@ msgstr "致同伴："
 #. module: mail
 #: model:mail.activity.type,name:mail.mail_activity_data_todo
 msgid "To-Do"
-msgstr "待办事项"
+msgstr "待办"
 
 #. module: mail
 #. odoo-javascript

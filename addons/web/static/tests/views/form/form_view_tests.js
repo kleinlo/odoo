@@ -413,7 +413,7 @@ QUnit.module("Views", (hooks) => {
             resId: 2,
         });
 
-        assert.containsN(target, ".o-form-buttonbox > button", 3);
+        assert.containsN(target, ".o-form-buttonbox > button", 2);
         assert.containsOnce(target, ".o-dropdown.oe_stat_button .o_button_more");
 
         await click(target, ".o-dropdown.oe_stat_button .o_button_more");
@@ -6413,6 +6413,25 @@ QUnit.module("Views", (hooks) => {
         );
     });
 
+    QUnit.test("button box is not rendered in form views in dialogs", async function (assert) {
+        await makeViewInDialog({
+            type: "form",
+            resModel: "partner",
+            serverData,
+            arch: `
+                <form>
+                    <div name="button_box" class="oe_button_box">
+                        <button type="object" class="oe_stat_button" icon="fa-check-square">
+                            <field name="bar"/>
+                        </button>
+                    </div>
+                </form>`,
+            resId: 2,
+        });
+        assert.containsOnce(target, ".o_dialog");
+        assert.containsNone(target, ".oe_stat_button");
+    });
+
     QUnit.test("properly apply onchange on one2many fields", async function (assert) {
         serverData.models.partner.records[0].p = [4];
         serverData.models.partner.onchanges = {
@@ -8343,10 +8362,10 @@ QUnit.module("Views", (hooks) => {
             );
         };
 
-        await assertFormContainsNButtonsWithSizeClass(0, 3);
+        await assertFormContainsNButtonsWithSizeClass(0, 2);
         await assertFormContainsNButtonsWithSizeClass(1, 3);
-        await assertFormContainsNButtonsWithSizeClass(2, 3);
-        await assertFormContainsNButtonsWithSizeClass(3, 7);
+        await assertFormContainsNButtonsWithSizeClass(2, 4);
+        await assertFormContainsNButtonsWithSizeClass(3, 6);
         await assertFormContainsNButtonsWithSizeClass(4, 3);
         await assertFormContainsNButtonsWithSizeClass(5, 4);
         await assertFormContainsNButtonsWithSizeClass(6, 7);
@@ -9892,61 +9911,6 @@ QUnit.module("Views", (hooks) => {
         assert.verifySteps(["web_save", "execute_action"]);
     });
 
-    QUnit.test(
-        "buttons are disabled until action is resolved (in dialogs)",
-        async function (assert) {
-            const def = makeDeferred();
-            const actionService = {
-                start() {
-                    return {
-                        doActionButton(args) {
-                            return def;
-                        },
-                    };
-                },
-            };
-            registry.category("services").add("action", actionService, { force: true });
-
-            serverData.views = {
-                "partner,false,form": `
-                    <form>
-                        <sheet>
-                            <div name="button_box" class="oe_button_box">
-                                <button class="oe_stat_button" name="some_action" type="action">
-                                    <field name="bar"/>
-                                </button>
-                            </div>
-                            <group>
-                                <field name="foo"/>
-                            </group>
-                        </sheet>
-                    </form>`,
-            };
-            await makeViewInDialog({
-                type: "form",
-                resModel: "partner",
-                serverData,
-                arch: `<form><field name="trululu"/></form>`,
-                resId: 1,
-                mockRPC(route, args) {
-                    if (args.method === "get_formview_id") {
-                        return Promise.resolve(false);
-                    }
-                },
-            });
-
-            await click(target.querySelector(".o_external_button"));
-            assert.notOk(target.querySelector(".modal .o-form-buttonbox button").disabled);
-
-            await click(target.querySelector(".modal .o-form-buttonbox button"));
-            assert.ok(target.querySelector(".modal .o-form-buttonbox button").disabled);
-
-            def.resolve();
-            await nextTick();
-            assert.notOk(target.querySelector(".modal .o-form-buttonbox button").disabled);
-        }
-    );
-
     QUnit.test("multiple clicks on save should reload only once", async function (assert) {
         const def = makeDeferred();
 
@@ -10733,7 +10697,7 @@ QUnit.module("Views", (hooks) => {
             arch: `
                 <form>
                     <sheet>
-                        <field name="product_id" context="{'lang': 'en_US'}" invisible="product_id == 33" widget="many2one"/>
+                        <field name="product_id" domain="[]" context="{'lang': 'en_US'}" invisible="product_id == 33" widget="many2one"/>
                     </sheet>
                 </form>`,
         });
@@ -10750,6 +10714,17 @@ QUnit.module("Views", (hooks) => {
                 .textContent,
             "{'lang': 'en_US'}",
             "context should be properly stringified"
+        );
+        assert.containsOnce(
+            target,
+            ".o-tooltip--technical > li[data-item='domain']",
+            "domain should be present for this field"
+        );
+        assert.strictEqual(
+            target.querySelector('.o-tooltip--technical > li[data-item="domain"]').lastChild
+                .textContent,
+            "[]",
+            "domain should be properly stringified"
         );
         assert.containsOnce(
             target,
@@ -10772,6 +10747,64 @@ QUnit.module("Views", (hooks) => {
             target.querySelector(".o-tooltip--technical > li[data-item=widget]").textContent.trim(),
             "Widget:Many2one (many2one)",
             "widget description should be correct"
+        );
+    });
+
+    QUnit.test("field tooltip in debug mode, on field with domain attr", async function (assert) {
+        patchWithCleanup(odoo, { debug: true });
+
+        patchWithCleanup(browser, {
+            setTimeout: (fn) => fn(),
+            clearTimeout: () => {},
+        });
+
+        await makeView({
+            type: "form",
+            resModel: "partner",
+            serverData,
+            arch: `
+                <form>
+                    <sheet>
+                        <field name="product_id" domain="[['id', '>', 3]]"/>
+                    </sheet>
+                </form>`,
+        });
+
+        await mouseEnter(target.querySelector("[name='product_id']"));
+        await nextTick();
+        assert.containsOnce(target, ".o-tooltip--technical > li[data-item='domain']");
+        assert.strictEqual(
+            target.querySelector('.o-tooltip--technical > li[data-item="domain"]').lastChild
+                .textContent,
+            "[['id', '>', 3]]"
+        );
+    });
+
+    QUnit.test("do not display unset attributes in debug field tooltip", async function (assert) {
+        patchWithCleanup(odoo, { debug: true });
+
+        patchWithCleanup(browser, {
+            setTimeout: (fn) => fn(),
+            clearTimeout: () => {},
+        });
+
+        await makeView({
+            type: "form",
+            resModel: "partner",
+            serverData,
+            arch: `
+                <form>
+                    <sheet>
+                        <field name="product_id"/>
+                    </sheet>
+                </form>`,
+        });
+
+        await mouseEnter(target.querySelector("[name='product_id']"));
+        await nextTick();
+        assert.deepEqual(
+            getNodesTextContent(target.querySelectorAll(".o-tooltip--technical > li")),
+            ["Field:product_id", "Type:many2one", "Context:{}", "Relation:product"]
         );
     });
 

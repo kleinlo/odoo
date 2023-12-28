@@ -54,7 +54,7 @@ msgstr "&amp; Envío"
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.address
 msgid "&amp;nbsp;(<i>Your shipping address will be requested later)</i>"
-msgstr ""
+msgstr "&amp;nbsp;(<i>Se le solicitará su dirección de envío después)</i>"
 
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.checkout_layout
@@ -190,6 +190,8 @@ msgid ""
 "<i class=\"fa fa-plus me-md-2\"/><span class=\"d-none d-md-inline\">Add "
 "address</span>"
 msgstr ""
+"<i class=\"fa fa-plus me-md-2\"/><span class=\"d-none d-md-inline\">Agregar "
+"dirección</span>"
 
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.confirmation
@@ -211,6 +213,8 @@ msgid ""
 "<i class=\"fa fa-shopping-cart me-2\"/>\n"
 "                                                Add to cart"
 msgstr ""
+"<i class=\"fa fa-shopping-cart me-2\"/>\n"
+"                                                Agregar al carrito"
 
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.address
@@ -278,6 +282,8 @@ msgid ""
 "<span class=\"d-md-none fa fa-shopping-cart\"/>\n"
 "                            <span class=\"d-none d-md-inline\">Add to cart</span>"
 msgstr ""
+"<span class=\"d-md-none fa fa-shopping-cart\"/>\n"
+"                            <span class=\"d-none d-md-inline\">Agregar al carrito</span>"
 
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.res_config_settings_view_form
@@ -316,6 +322,8 @@ msgid ""
 "<span class=\"o_wsale_delivery_badge_price float-end fw-bold\" "
 "name=\"price\">Select to compute delivery rate</span>"
 msgstr ""
+"<span class=\"o_wsale_delivery_badge_price float-end fw-bold\" "
+"name=\"price\">Seleccionar para calcular la tasa de envío</span>"
 
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.shop_product_carousel
@@ -339,7 +347,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:website_sale.address
 #: model_terms:ir.ui.view,arch_db:website_sale.navigation_buttons
 msgid "<span class=\"px-3\">or</span>"
-msgstr ""
+msgstr "<span class=\"px-3\">o</span>"
 
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.extra_info
@@ -362,6 +370,8 @@ msgid ""
 "<span class=\"text-muted\" invisible=\"product_variant_count &lt;= 1\">Based"
 " on variants</span>"
 msgstr ""
+"<span class=\"text-muted\" invisible=\"product_variant_count &lt;= "
+"1\">Basado en las variantes</span>"
 
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.products
@@ -400,7 +410,7 @@ msgstr "<strong><i class=\"oi oi-arrow-right\"/> Ver alternativas</strong>"
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.payment
 msgid "<strong>No suitable payment option could be found.</strong><br/>"
-msgstr ""
+msgstr "<strong>No se encontró ningún método de pago adecuado.</strong><br/>"
 
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.confirmation
@@ -534,6 +544,8 @@ msgid ""
 "A detailed, formatted description to promote your product on this page. Use "
 "'/' to discover more features."
 msgstr ""
+"Una descripción detallada y con formato para promocionar su producto en esta"
+" página. Use '/' para explorar más funciones.  "
 
 #. module: website_sale
 #: model_terms:ir.actions.act_window,help:website_sale.product_template_action_website
@@ -775,12 +787,12 @@ msgstr "Cantidad de carros abandonados"
 #: code:addons/website_sale/controllers/delivery.py:0
 #, python-format
 msgid "Anonymous express checkout partner for order %s"
-msgstr "Socio anónimo de pago exprés para pedidos %s"
+msgstr "Socio anónimo de pago rápido para pedidos %s"
 
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.address
 msgid "Apartment, suite, etc."
-msgstr ""
+msgstr "Departamento, suite, etc. "
 
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.coupon_form
@@ -832,7 +844,7 @@ msgstr "Calificación promedio"
 #: code:addons/website_sale/models/website.py:0
 #, python-format
 msgid "Back to cart"
-msgstr ""
+msgstr "Regresar al carrito"
 
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.snippet_options
@@ -2387,8 +2399,8 @@ msgstr "Imagen principal"
 #: model_terms:ir.ui.view,arch_db:website_sale.res_config_settings_view_form
 msgid "Manage Promotions, coupons, loyalty cards, Gift cards & eWallet"
 msgstr ""
-"Gestione promociones, cupones, tarjetas de lealtad, tarjetas de regalo y "
-"monedero electrónico"
+"Gestione promociones, cupones, tarjetas de fidelidad, tarjetas de regalo y "
+"monederos electrónicos"
 
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.res_config_settings_view_form
@@ -3377,7 +3389,7 @@ msgstr "Reanudar pedido"
 #: code:addons/website_sale/models/website.py:0
 #, python-format
 msgid "Return to shipping"
-msgstr ""
+msgstr "Regresar al envío "
 
 #. module: website_sale
 #. odoo-python
@@ -3596,7 +3608,7 @@ msgstr "Compartir"
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.address
 msgid "Ship to the same address"
-msgstr ""
+msgstr "Enviar a la misma dirección"
 
 #. module: website_sale
 #. odoo-python
@@ -3615,7 +3627,7 @@ msgstr "Dirección de envío"
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.res_config_settings_view_form
 msgid "Shipping Costs"
-msgstr "Costos de envío"
+msgstr "Costes de envío"
 
 #. module: website_sale
 #: model:ir.model,name:website_sale.model_delivery_carrier
@@ -3627,7 +3639,7 @@ msgstr "Métodos de envío"
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.address
 msgid "Shipping address"
-msgstr ""
+msgstr "Dirección de envío"
 
 #. module: website_sale
 #: model:website.menu,name:website_sale.menu_shop
@@ -3658,7 +3670,7 @@ msgstr "Tienda - Productos"
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.payment
 msgid "Shop - Select Payment Method"
-msgstr ""
+msgstr "Comprar - Seleccionar método de pago"
 
 #. module: website_sale
 #: model:ir.model.fields,field_description:website_sale.field_website__shop_default_sort
@@ -3668,7 +3680,7 @@ msgstr "Clasificación predeterminada de tienda"
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.products_add_to_cart
 msgid "Shopping cart"
-msgstr "Carro de compras"
+msgstr "Carrito de compras"
 
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.snippet_options
@@ -3693,7 +3705,7 @@ msgstr "Mostrar en la página del producto"
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.snippet_options
 msgid "Show/hide shopping cart"
-msgstr ""
+msgstr "Mostrar/ocultar carrito de compras"
 
 #. module: website_sale
 #. odoo-python
@@ -3800,7 +3812,7 @@ msgstr "Permanecer en la página del producto"
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.address
 msgid "Street and Number"
-msgstr ""
+msgstr "Número y calle"
 
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.payment
@@ -3838,7 +3850,7 @@ msgstr "Accesorios sugeridos"
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.suggested_products_list
 msgid "Suggested accessories"
-msgstr ""
+msgstr "Accesorios sugeridos"
 
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.product_template_form_view
@@ -4225,7 +4237,7 @@ msgstr "Variante"
 #. module: website_sale
 #: model:ir.model.fields,field_description:website_sale.field_product_product__ribbon_id
 msgid "Variant Ribbon"
-msgstr ""
+msgstr "Listón de variante"
 
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.snippet_options
@@ -4254,7 +4266,7 @@ msgstr "Ver producto"
 #: code:addons/website_sale/static/src/js/notification/cart_notification/cart_notification.xml:0
 #, python-format
 msgid "View cart"
-msgstr ""
+msgstr "Ver carrito"
 
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.dynamic_filter_template_product_product_view_detail
@@ -4565,6 +4577,7 @@ msgstr "¡Su carrito está vacío!"
 #, python-format
 msgid "Your cart is not ready to be paid, please verify previous steps."
 msgstr ""
+"Su carrito no está listo para el pago, verifique los pasos anteriores."
 
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.payment_confirmation_status
@@ -4687,7 +4700,7 @@ msgstr "o"
 #. module: website_sale
 #: model_terms:ir.ui.view,arch_db:website_sale.cart_lines
 msgid "remove"
-msgstr ""
+msgstr "eliminar"
 
 #. module: website_sale
 #. odoo-javascript

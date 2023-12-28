@@ -8,16 +8,34 @@ from odoo.addons.sale.tests.test_sale_product_attribute_value_config import Test
 
 
 @tagged('post_install', '-at_install')
-class TestUi(TestSaleProductAttributeValueCommon, HttpCase):
+class WebsiteSaleLoyaltyTestUi(TestSaleProductAttributeValueCommon, HttpCase):
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.env.ref('base.user_admin').write({
+            'company_id': cls.env.company.id,
+            'company_ids': [(4, cls.env.company.id)],
+            'name': 'Mitchell Admin',
+            'street': '215 Vine St',
+            'phone': '+1 555-555-5555',
+            'city': 'Scranton',
+            'zip': '18503',
+            'country_id': cls.env.ref('base.us').id,
+            'state_id': cls.env.ref('base.state_us_39').id,
+        })
+        cls.env.ref('base.user_admin').sudo().partner_id.company_id = cls.env.company
+        cls.env.ref('website.default_website').company_id = cls.env.company
 
     def test_01_admin_shop_sale_loyalty_tour(self):
         if self.env['ir.module.module']._get('payment_custom').state != 'installed':
             self.skipTest("Transfer provider is not installed")
 
         transfer_provider = self.env.ref('payment.payment_provider_transfer')
-        transfer_provider.write({
+        transfer_provider.sudo().write({
             'state': 'enabled',
             'is_published': True,
+            'company_id': self.env.company.id,
         })
         transfer_provider._transfer_ensure_pending_msg_is_set()
 
@@ -170,7 +188,7 @@ class TestUi(TestSaleProductAttributeValueCommon, HttpCase):
 
 
 @tagged('post_install', '-at_install')
-class TestWebsiteSaleCoupon(TransactionCase):
+class TestWebsiteSaleCoupon(HttpCase):
 
     @classmethod
     def setUpClass(cls):
@@ -259,3 +277,39 @@ class TestWebsiteSaleCoupon(TransactionCase):
         order._gc_abandoned_coupons()
 
         self.assertEqual(len(order.applied_coupon_ids), 0, "The coupon should've been removed from the order as more than 4 days")
+
+    def test_02_apply_discount_code_program_multi_rewards(self):
+        """
+            Check the triggering of a promotion program based on a promo code with multiple rewards
+        """
+        self.env['loyalty.program'].search([]).write({'active': False})
+        chair = self.env['product.product'].create({
+            'name': 'Super Chair', 'list_price': 1000, 'website_published': True
+        })
+        self.discount_code_program_multi_rewards = self.env['loyalty.program'].create({
+            'name': 'Discount code program',
+            'program_type': 'promo_code',
+            'applies_on': 'current',
+            'trigger': 'with_code',
+            'rule_ids': [(0, 0, {
+                'code': '12345',
+                'reward_point_amount': 1,
+                'reward_point_mode': 'order',
+            })],
+            'reward_ids': [
+                (0, 0, {
+                    'reward_type': 'discount',
+                    'discount': 10,
+                    'discount_applicability': 'specific',
+                    'required_points': 1,
+                    'discount_product_ids': chair,
+                }),
+                (0, 0, {
+                    'reward_type': 'discount',
+                    'discount': 50,
+                    'discount_applicability': 'order',
+                    'required_points': 1,
+                }),
+            ],
+        })
+        self.start_tour('/', 'apply_discount_code_program_multi_rewards', login='admin')
