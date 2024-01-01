@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record model="ir.config_parameter" id="mommy_x2many_quick_edit">
+            <field name="key">mommy.quick.edit</field>
+            <field name="value">False</field>
+        </record>
+    </data>
+</odoo>

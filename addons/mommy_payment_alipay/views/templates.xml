@@ -1,0 +1,12 @@
+<odoo>
+    <data>
+        <template id="redirect_form">
+            <form t-att-action="api_url" method="post">
+                <input name="reference" t-att-value="reference" />
+                <input name="amount" t-att-value="amount" />
+                <input name="return_url" t-att-value="return_url"/>
+                <input name="notify_url" t-att-value="notify_url"/>
+            </form>
+        </template>
+    </data>
+</odoo>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="ir_model_form" model="ir.ui.view">
+    <field name="name">ir model form</field>
+    <field name="model">ir.model</field>
+    <field name="inherit_id" ref="mail.model_form_view"/>
+    <field name="arch" type="xml">
+      <field name="is_mail_thread" position="after">
+        <field name="track"/>
+        <field name="filter_read"/>
+      </field>
+    </field>
+  </record>
+
+  <record id="view_ir_sequence_form" model="ir.ui.view">
+    <field name="name">ir sequence form</field>
+    <field name="model">ir.sequence</field>
+    <field name="inherit_id" ref="base.sequence_view"/>
+    <field name="arch" type="xml">
+      <field name="use_date_range" position="after">
+        <field name="range_type" widget="radio" invisible="[('use_date_range', '!=', True)]" options="{'horizontal': true}"/>
+      </field>
+    </field>
+  </record>
+</odoo>

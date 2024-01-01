@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="mommy_res_config_settings" model="ir.ui.view">
+            <field name="name">mommy settings</field>
+            <field name="model">res.config.settings</field>
+            <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="inside">
+                    <app data-string="Mommy" name="mommy" string="Mommy" logo="/mommy_base/static/description/icon.png">
+                        <div id="basic">
+                            <block title="Customized Your Odoo" name="basic_settings">
+                                <setting id="title">
+                                    <field name="mommy_title"/>
+                                </setting>
+                                <setting id="page_size">
+                                    <field name="mommy_x2many_page_size"/>
+                                </setting>
+                            </block>
+                        </div>
+
+                        <div id="personal_setting">
+                            <block id="personal_setting" title="Personal Center Setting">
+                                <setting id="personal">
+                                    <field name="mommy_show_document"/>
+                                </setting>
+                                <setting>
+                                    <field name="mommy_show_support"/>
+                                </setting>
+                                <setting>
+                                    <field name="mommy_show_odoo_account"/>
+                                </setting>
+                            </block>
+                        </div>
+
+                        <div id="login_page_setting">
+                            <block id="login_page_setting" title="Login Page Setting">
+                                <setting id="login_setting">
+                                    <field name="mommy_show_brand"/>
+                                </setting>
+                                <setting>
+                                    <field name="mommy_database_manager"/>
+                                </setting>
+                            </block>
+                        </div>
+                    </app>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="shpping_setting" model="ir.ui.view">
+            <field name="name">mommy shpping settings</field>
+            <field name="model">res.config.settings</field>
+            <field name="inherit_id" ref="sale.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//setting[@id='shipping_costs_shiprocket']" position="after">
+                    <setting string="SF Express" id="shipping_costs_sf" help="Compute shipping costs and ship with SF" documentation="https://apps.odoo.com/apps/modules/16.0/mommy_delivery_sf/">
+                        <field name="module_mommy_delivery_sf" widget="upgrade_boolean"/>
+                    </setting>
+                    <setting string="YTO Express" id="shipping_costs_yto" help="Compute shipping costs and ship with YTO" documentation="https://apps.odoo.com/apps/modules/16.0/mommy_delivery_yto/">
+                        <field name="module_mommy_delivery_yto" widget="upgrade_boolean"/>
+                    </setting>
+                    <setting string="KDN Integration" id="shipping_costs_kdn" help="Compute shipping costs and ship with KDN" documentation="https://apps.odoo.com/apps/modules/16.0/mommy_delivery_kdniao/">
+                        <field name="module_mommy_delivery_kdniao" widget="upgrade_boolean"/>
+                    </setting>
+                </xpath>
+            </field>
+        </record>
+
+
+        <record id="baidu_map_settings" model="ir.ui.view">
+            <field name="name">Baidu Map Settings</field>
+            <field name="model">res.config.settings</field>
+            <field name="inherit_id" ref="base_setup.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//block[@name='integration']" position="inside">
+                    <setting string="Baidu Map" id="baidu_map" help="Using baidu map to replace google &amp; mapbox in china mainland." documentation="https://apps.odoo.com/apps/modules/13.0/baidu_map/">
+                        <field name="module_baidu_map" widget="upgrade_boolean"/>
+                    </setting>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

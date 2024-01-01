@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="payment.method" id="payment_method_mommy_alipay">
+            <field name="name">Alipay</field>
+            <field name="code">alipay</field>
+            <field name="sequence">1000</field>
+            <field name="active">False</field>
+            <field name="image" type="base64" file="payment_alipay/static/description/icon.png"/>
+            <field name="support_tokenization">False</field>
+            <field name="support_express_checkout">False</field>
+            <field name="support_refund">partial</field>
+        </record>
+
+        <record model="payment.method" id="payment_method_mommy_wechatpay">
+            <field name="name">WeChat Pay</field>
+            <field name="code">wechatpay</field>
+            <field name="sequence">1000</field>
+            <field name="active">False</field>
+            <!-- <field name="image" type="base64" file="mommy_payment_wechatpay/static/description/icon.png"/> -->
+            <field name="support_tokenization">False</field>
+            <field name="support_express_checkout">False</field>
+            <field name="support_refund">partial</field>
+        </record>
+    </data>
+</odoo>

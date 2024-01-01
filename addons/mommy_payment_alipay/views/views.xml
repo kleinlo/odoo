@@ -1,0 +1,21 @@
+<odoo>
+  <data>
+    <record model="ir.ui.view" id="acquirer_form_alipay">
+      <field name="name">acquirer.form.alipay</field>
+      <field name="model">payment.provider</field>
+      <field name="inherit_id" ref="payment.payment_provider_form"/>
+      <field name="arch" type="xml">
+        <xpath expr='//group[@name="provider_credentials"]' position='inside'>
+          <group invisible="code != 'alipay'">
+            <field name="alipay_appid"/>
+            <field name="seller_id"/>
+            <field name="alipay_secret"/>
+            <field name="alipay_public_key"/>
+            <field name="alipay_sign_type"/>
+          </group>
+        </xpath>
+      </field>
+    </record>
+
+  </data>
+</odoo>

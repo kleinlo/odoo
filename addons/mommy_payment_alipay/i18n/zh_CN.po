@@ -1,0 +1,104 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* mommy_payment_alipay
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 17.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-12-09 05:33+0000\n"
+"PO-Revision-Date: 2023-12-09 13:34+0800\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: zh\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"X-Generator: Poedit 3.1.1\n"
+
+#. module: mommy_payment_alipay
+#: model:ir.model.fields.selection,name:mommy_payment_alipay.selection__payment_provider__code__alipay
+msgid "AliPay"
+msgstr "支付宝"
+
+#. module: mommy_payment_alipay
+#: model:ir.model.fields,field_description:mommy_payment_alipay.field_payment_transaction__alipay_txn_type
+msgid "Aliapy Transaction type"
+msgstr "交易类型"
+
+#. module: mommy_payment_alipay
+#: model:ir.model.fields,field_description:mommy_payment_alipay.field_payment_provider__alipay_appid
+msgid "Alipay AppId"
+msgstr "支付宝 AppId"
+
+#. module: mommy_payment_alipay
+#: model:ir.model.fields,field_description:mommy_payment_alipay.field_payment_provider__alipay_public_key
+msgid "Alipay Public Key"
+msgstr "支付宝公钥"
+
+#. module: mommy_payment_alipay
+#: model:ir.model.fields,field_description:mommy_payment_alipay.field_payment_provider__seller_id
+msgid "Alipay Seller Id"
+msgstr "支付宝卖家编号"
+
+#. module: mommy_payment_alipay
+#: model:ir.model.fields,field_description:mommy_payment_alipay.field_payment_provider__code
+msgid "Code"
+msgstr "代码"
+
+#. module: mommy_payment_alipay
+#: model:ir.model.fields,field_description:mommy_payment_alipay.field_payment_provider__alipay_secret
+msgid "Merchant Private Key"
+msgstr "商户私钥"
+
+#. module: mommy_payment_alipay
+#. odoo-python
+#: code:addons/mommy_payment_alipay/models/payment_transaction.py:0
+#, python-format
+msgid "No transaction found matching reference %s."
+msgstr "未找到与参考编号 %s 匹配的事务。"
+
+#. module: mommy_payment_alipay
+#: model:ir.model,name:mommy_payment_alipay.model_payment_provider
+msgid "Payment Provider"
+msgstr "支付提供商"
+
+#. module: mommy_payment_alipay
+#: model:ir.model,name:mommy_payment_alipay.model_payment_transaction
+msgid "Payment Transaction"
+msgstr "支付交易"
+
+#. module: mommy_payment_alipay
+#: model:ir.model.fields.selection,name:mommy_payment_alipay.selection__payment_provider__alipay_sign_type__rsa
+msgid "RSA"
+msgstr ""
+
+#. module: mommy_payment_alipay
+#: model:ir.model.fields.selection,name:mommy_payment_alipay.selection__payment_provider__alipay_sign_type__rsa2
+msgid "RSA2"
+msgstr ""
+
+#. module: mommy_payment_alipay
+#: model:ir.model.fields,field_description:mommy_payment_alipay.field_payment_provider__alipay_sign_type
+msgid "Sign Type"
+msgstr "签名类型"
+
+#. module: mommy_payment_alipay
+#. odoo-python
+#: code:addons/mommy_payment_alipay/models/payment_transaction.py:0
+#, python-format
+msgid "The customer left the payment page."
+msgstr "客户离开了支付页面"
+
+#. module: mommy_payment_alipay
+#: model:ir.model.fields,help:mommy_payment_alipay.field_payment_provider__code
+msgid "The technical code of this payment provider."
+msgstr "该支付提供商的技术代码。"
+
+#. module: mommy_payment_alipay
+#. odoo-python
+#: code:addons/mommy_payment_alipay/models/payment_transaction.py:0
+#, python-format
+msgid "received invalid transaction status: %s"
+msgstr "收到无效的交易状态:%s"

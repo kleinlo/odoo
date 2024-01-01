@@ -1,0 +1,435 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* mommy_base
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 17.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-12-09 05:39+0000\n"
+"PO-Revision-Date: 2023-12-09 13:41+0800\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: zh\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"X-Generator: Poedit 3.1.1\n"
+
+#. module: mommy_base
+#: model:payment.provider,name:mommy_base.payment_provider_alipay
+msgid "AliPay"
+msgstr "支付宝"
+
+#. module: mommy_base
+#: model:ir.model.fields,field_description:mommy_base.field_res_config_settings__module_mommy_payment_alipay
+msgid "Alipay"
+msgstr "支付宝"
+
+#. module: mommy_base
+#: model:ir.model.fields,field_description:mommy_base.field_res_config_settings__module_baidu_map
+#: model_terms:ir.ui.view,arch_db:mommy_base.baidu_map_settings
+msgid "Baidu Map"
+msgstr "百度地图"
+
+#. module: mommy_base
+#: model:ir.model,name:mommy_base.model_base
+msgid "Base"
+msgstr "基础"
+
+#. module: mommy_base
+#: model_terms:ir.ui.view,arch_db:mommy_base.view_pops_up_confirm_form
+msgid "Cancel"
+msgstr "取消"
+
+#. module: mommy_base
+#: model:ir.model.fields,field_description:mommy_base.field_res_partner__external_company_details
+#: model:ir.model.fields,field_description:mommy_base.field_res_users__external_company_details
+msgid "Company Details"
+msgstr "公司详细信息"
+
+#. module: mommy_base
+#: model:ir.model,name:mommy_base.model_ir_property
+msgid "Company Property"
+msgstr "公司属性"
+
+#. module: mommy_base
+#: model:ir.model.fields,field_description:mommy_base.field_res_partner__external_report_header
+#: model:ir.model.fields,field_description:mommy_base.field_res_users__external_report_header
+msgid "Company Tagline"
+msgstr "公司标语"
+
+#. module: mommy_base
+#: model_terms:ir.ui.view,arch_db:mommy_base.shpping_setting
+msgid "Compute shipping costs and ship with KDN"
+msgstr "使用快递鸟集成发货服务"
+
+#. module: mommy_base
+#: model_terms:ir.ui.view,arch_db:mommy_base.shpping_setting
+msgid "Compute shipping costs and ship with SF"
+msgstr "使用顺丰速运进行发货"
+
+#. module: mommy_base
+#: model_terms:ir.ui.view,arch_db:mommy_base.shpping_setting
+msgid "Compute shipping costs and ship with YTO"
+msgstr "使用圆通速递进行发货"
+
+#. module: mommy_base
+#: model:ir.model,name:mommy_base.model_res_config_settings
+msgid "Config Settings"
+msgstr "配置设定"
+
+#. module: mommy_base
+#: model_terms:ir.ui.view,arch_db:mommy_base.view_pops_up_confirm_form
+msgid "Confirm"
+msgstr "确认"
+
+#. module: mommy_base
+#: model:ir.model,name:mommy_base.model_res_partner
+msgid "Contact"
+msgstr "联系人"
+
+#. module: mommy_base
+#: model:ir.model.fields,field_description:mommy_base.field_mommy_message_popsup__create_uid
+msgid "Created by"
+msgstr "创建者"
+
+#. module: mommy_base
+#: model:ir.model.fields,field_description:mommy_base.field_mommy_message_popsup__create_date
+msgid "Created on"
+msgstr "创建于"
+
+#. module: mommy_base
+#: model_terms:ir.ui.view,arch_db:mommy_base.mommy_res_config_settings
+msgid "Customized Your Odoo"
+msgstr "个性化Odoo"
+
+#. module: mommy_base
+#: model:ir.model.fields,field_description:mommy_base.field_res_config_settings__mommy_database_manager
+msgid "Disable database manager & powered by odoo"
+msgstr "禁用数据库管理和Powered by Odoo"
+
+#. module: mommy_base
+#: model:ir.model.fields,field_description:mommy_base.field_mommy_message_popsup__display_name
+msgid "Display Name"
+msgstr "显示名称"
+
+#. module: mommy_base
+#: model:ir.model.fields,field_description:mommy_base.field_res_partner__external_layout_id
+#: model:ir.model.fields,field_description:mommy_base.field_res_users__external_layout_id
+msgid "Document Template"
+msgstr "文件模板"
+
+#. module: mommy_base
+#. odoo-javascript
+#: code:addons/mommy_base/static/src/xml/menu.xml:0
+#, python-format
+msgid "Documentation"
+msgstr "文档"
+
+#. module: mommy_base
+#: model:ir.model,name:mommy_base.model_mail_thread
+msgid "Email Thread"
+msgstr "邮件会话"
+
+#. module: mommy_base
+#: model:ir.model.fields,field_description:mommy_base.field_ir_model__filter_read
+msgid "Filter Read"
+msgstr "过滤器 阅读"
+
+#. module: mommy_base
+#: model:ir.model.fields,field_description:mommy_base.field_res_partner__external_report_footer
+#: model:ir.model.fields,field_description:mommy_base.field_res_users__external_report_footer
+msgid "Footer"
+msgstr "页脚"
+
+#. module: mommy_base
+#: model:ir.model.fields.selection,name:mommy_base.selection__ir_property__type__html
+msgid "Html"
+msgstr "HTML"
+
+#. module: mommy_base
+#: model:ir.model.fields,field_description:mommy_base.field_mommy_message_popsup__id
+msgid "ID"
+msgstr ""
+
+#. module: mommy_base
+#: model:ir.model.fields,field_description:mommy_base.field_res_config_settings__module_mommy_delivery_kdniao
+msgid "KDN Connector"
+msgstr "快递鸟"
+
+#. module: mommy_base
+#: model_terms:ir.ui.view,arch_db:mommy_base.shpping_setting
+msgid "KDN Integration"
+msgstr "快递鸟集成"
+
+#. module: mommy_base
+#: model:ir.model.fields,field_description:mommy_base.field_mommy_message_popsup__write_uid
+msgid "Last Updated by"
+msgstr "最后修改者"
+
+#. module: mommy_base
+#: model:ir.model.fields,field_description:mommy_base.field_mommy_message_popsup__write_date
+msgid "Last Updated on"
+msgstr "最后更新于"
+
+#. module: mommy_base
+#. odoo-javascript
+#: code:addons/mommy_base/static/src/xml/menu.xml:0
+#, python-format
+msgid "Log out"
+msgstr "登出"
+
+#. module: mommy_base
+#: model_terms:ir.ui.view,arch_db:mommy_base.mommy_res_config_settings
+msgid "Login Page Setting"
+msgstr "登录页面设置"
+
+#. module: mommy_base
+#: model:ir.model.fields,field_description:mommy_base.field_mommy_message_popsup__content
+msgid "Message Content"
+msgstr "内容"
+
+#. module: mommy_base
+#. odoo-python
+#: code:addons/mommy_base/models/base.py:0
+#, python-format
+msgid "Model: %s has no valid action for this operation."
+msgstr "模型:%s对于此操作缺少有效的动作"
+
+#. module: mommy_base
+#: model:ir.model,name:mommy_base.model_ir_model
+msgid "Models"
+msgstr "模型"
+
+#. module: mommy_base
+#: model_terms:ir.ui.view,arch_db:mommy_base.mommy_res_config_settings
+msgid "Mommy"
+msgstr "欧姆"
+
+#. module: mommy_base
+#: model:ir.model.fields.selection,name:mommy_base.selection__ir_sequence__range_type__month
+msgid "Month"
+msgstr "月"
+
+#. module: mommy_base
+#. odoo-javascript
+#: code:addons/mommy_base/static/src/xml/menu.xml:0
+#, python-format
+msgid "My Odoo.com account"
+msgstr "我的Odoo账户"
+
+#. module: mommy_base
+#: model_terms:ir.ui.view,arch_db:mommy_base.customize_window_form_view
+msgid "OK"
+msgstr ""
+
+#. module: mommy_base
+#: model_terms:ir.ui.view,arch_db:mommy_base.mail_notification_layout
+#: model_terms:ir.ui.view,arch_db:mommy_base.mail_notification_light
+msgid "Odoo"
+msgstr ""
+
+#. module: mommy_base
+#: model:ir.model,name:mommy_base.model_mommy_base
+msgid "Odoo Mommy Settings"
+msgstr "欧姆设置"
+
+#. module: mommy_base
+#: model_terms:ir.ui.view,arch_db:mommy_base.mommy_res_config_settings
+msgid "Personal Center Setting"
+msgstr "个人中心设置"
+
+#. module: mommy_base
+#: model_terms:ir.ui.view,arch_db:mommy_base.mail_notification_layout
+#: model_terms:ir.ui.view,arch_db:mommy_base.mail_notification_light
+msgid "Powered by"
+msgstr "技术支持："
+
+#. module: mommy_base
+#. odoo-javascript
+#: code:addons/mommy_base/static/src/xml/menu.xml:0
+#, python-format
+msgid "Preferences"
+msgstr "首选项"
+
+#. module: mommy_base
+#: model:ir.model.fields,field_description:mommy_base.field_res_config_settings__quick_edit
+msgid "Quick Editable"
+msgstr "启用快速编辑"
+
+#. module: mommy_base
+#: model_terms:ir.ui.view,arch_db:mommy_base.view_res_partner_form
+msgid "Report"
+msgstr "报表"
+
+#. module: mommy_base
+#: model:ir.model,name:mommy_base.model_ir_actions_report
+msgid "Report Action"
+msgstr "报表动作"
+
+#. module: mommy_base
+#: model_terms:ir.ui.view,arch_db:mommy_base.shpping_setting
+msgid "SF Express"
+msgstr "顺丰速运"
+
+#. module: mommy_base
+#: model:ir.model.fields,field_description:mommy_base.field_res_config_settings__module_mommy_delivery_sf
+msgid "SF Express Connector"
+msgstr "顺丰速运"
+
+#. module: mommy_base
+#: model:ir.model,name:mommy_base.model_ir_sequence
+msgid "Sequence"
+msgstr "序列"
+
+#. module: mommy_base
+#: model:ir.model.fields,field_description:mommy_base.field_res_config_settings__mommy_show_document
+msgid "Show Documents"
+msgstr "显示文档"
+
+#. module: mommy_base
+#: model:ir.model.fields,field_description:mommy_base.field_res_config_settings__mommy_show_odoo_account
+msgid "Show Odoo Account"
+msgstr "显示我的Odoo账号"
+
+#. module: mommy_base
+#: model:ir.model.fields,field_description:mommy_base.field_res_config_settings__mommy_show_brand
+msgid "Show Odoo Brand"
+msgstr "显示我的Odoo品牌"
+
+#. module: mommy_base
+#: model:ir.model.fields,field_description:mommy_base.field_res_config_settings__mommy_show_shortcuts
+msgid "Show Shortcuts"
+msgstr "显示快捷方式"
+
+#. module: mommy_base
+#: model:ir.model.fields,field_description:mommy_base.field_res_config_settings__mommy_show_support
+msgid "Show Support"
+msgstr "显示支持"
+
+#. module: mommy_base
+#: model:ir.model.fields,field_description:mommy_base.field_ir_sequence__range_type
+msgid "Subsequence Range"
+msgstr "子序列范围"
+
+#. module: mommy_base
+#. odoo-javascript
+#: code:addons/mommy_base/static/src/xml/menu.xml:0
+#, python-format
+msgid "Support"
+msgstr "支持"
+
+#. module: mommy_base
+#: model:ir.model.fields,field_description:mommy_base.field_res_config_settings__mommy_title
+msgid "System Title"
+msgstr "系统标题"
+
+#. module: mommy_base
+#. odoo-python
+#: code:addons/mommy_base/models/base.py:0
+#, python-format
+msgid "This field was restricted to unique, value %s already existed!"
+msgstr "该字段具有唯一性限制，值%s已经存在!"
+
+#. module: mommy_base
+#: model_terms:ir.ui.view,arch_db:mommy_base.customize_window_form_view
+msgid "Tip Message"
+msgstr "提示信息"
+
+#. module: mommy_base
+#: model:ir.model.fields,field_description:mommy_base.field_mommy_message_popsup__name
+msgid "Title"
+msgstr "标题"
+
+#. module: mommy_base
+#: model:ir.model.fields,field_description:mommy_base.field_ir_model__track
+msgid "Track All"
+msgstr "跟踪所有"
+
+#. module: mommy_base
+#: model:ir.model.fields,help:mommy_base.field_ir_model__track
+msgid "Track all fields changes and displaying on chatter?"
+msgstr "跟踪所有字段并显示在对话历史中?"
+
+#. module: mommy_base
+#: model:ir.model.fields,field_description:mommy_base.field_ir_property__type
+msgid "Type"
+msgstr "类型"
+
+#. module: mommy_base
+#: model_terms:ir.ui.view,arch_db:mommy_base.mail_notification_layout
+#: model_terms:ir.ui.view,arch_db:mommy_base.mail_notification_light
+msgid "Unfollow"
+msgstr "取消关注"
+
+#. module: mommy_base
+#: model_terms:ir.ui.view,arch_db:mommy_base.baidu_map_settings
+msgid "Using baidu map to replace google & mapbox in china mainland."
+msgstr "在中国大陆使用百度地图替代谷歌地图"
+
+#. module: mommy_base
+#: model:payment.provider,name:mommy_base.payment_provider_wechatpay
+msgid "WeChat Pay"
+msgstr "微信支付"
+
+#. module: mommy_base
+#: model:ir.model.fields.selection,name:mommy_base.selection__ir_sequence__range_type__week
+msgid "Week"
+msgstr "周"
+
+#. module: mommy_base
+#: model:ir.model.fields,field_description:mommy_base.field_res_config_settings__mommy_x2many_page_size
+msgid "X2Many2 Page Size"
+msgstr "X2many页面数量"
+
+#. module: mommy_base
+#: model:ir.model.fields,field_description:mommy_base.field_res_config_settings__module_mommy_delivery_yto
+#: model_terms:ir.ui.view,arch_db:mommy_base.shpping_setting
+msgid "YTO Express"
+msgstr "圆通速递"
+
+#. module: mommy_base
+#: model:ir.model.fields.selection,name:mommy_base.selection__ir_sequence__range_type__year
+msgid "Year"
+msgstr "年"
+
+#. module: mommy_base
+#: model_terms:payment.provider,auth_msg:mommy_base.payment_provider_alipay
+#: model_terms:payment.provider,auth_msg:mommy_base.payment_provider_wechatpay
+msgid "Your payment has been authorized."
+msgstr "付款已经被授权"
+
+#. module: mommy_base
+#: model_terms:payment.provider,cancel_msg:mommy_base.payment_provider_alipay
+#: model_terms:payment.provider,cancel_msg:mommy_base.payment_provider_wechatpay
+msgid "Your payment has been cancelled."
+msgstr "付款被取消"
+
+#. module: mommy_base
+#: model_terms:payment.provider,pending_msg:mommy_base.payment_provider_alipay
+#: model_terms:payment.provider,pending_msg:mommy_base.payment_provider_wechatpay
+msgid "Your payment has been successfully processed but is waiting for approval."
+msgstr "付款成功，但是仍需等待审核。"
+
+#. module: mommy_base
+#: model_terms:payment.provider,done_msg:mommy_base.payment_provider_alipay
+#: model_terms:payment.provider,done_msg:mommy_base.payment_provider_wechatpay
+msgid "Your payment has been successfully processed."
+msgstr "付款成功"
+
+#. module: mommy_base
+#: model:ir.model,name:mommy_base.model_mommy_message_popsup
+msgid "mommy message"
+msgstr "欧姆消息"
+
+#. module: mommy_base
+#: model_terms:ir.ui.view,arch_db:mommy_base.view_pops_up_confirm_form
+msgid "or"
+msgstr "或"
+
+#. module: mommy_base
+#: model_terms:ir.ui.view,arch_db:mommy_base.view_pops_up_confirm_form
+msgid "pops up"
+msgstr "弹窗"
