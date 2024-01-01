@@ -1,2 +1,2 @@
 # models/__init__.py
-from . import create_folder_wizard
+from . import added_module
